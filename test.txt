@@ -1,1 +1,30 @@
-This is a test
+user stuff: db functions (create, remove, edit, get), routes (authentication and shit for remove and edit)
+event stuff: db functions, routes
+register
+login
+
+write validator (strings, ids, arrays of strings, emails) - Calvin
+    format will be checkString, checkId, checkArr, checkEmail
+
+
+Database functions for:
+
+Add events page: Aaron
+    -Create events
+
+Event page: Eddie
+    -Get specific event info
+    -Add a comment to the event
+
+All events page: Ethan
+    -Get all events
+    -Get events based on tags
+    -Search for events based on search term
+
+My registered events page: Calvin
+    -List events the user is registered for
+
+User profile page: Ryan
+    -List user's personal information
+
+getEventsForUser(userID, ....)
