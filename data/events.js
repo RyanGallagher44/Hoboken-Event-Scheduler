@@ -1,5 +1,5 @@
 const mongoCollections = require('../config/mongoCollections');
-const bands = mongoCollections.events;
+const events = mongoCollections.events;
 const { ObjectId } = require('mongodb');
 
 async function create(name, users_registered, creator, date, time, location, description, tags){
@@ -19,3 +19,33 @@ async function create(name, users_registered, creator, date, time, location, des
       throw 'Could not add event';
     }
 }
+
+async function get(id){
+  //check all the inputs
+  id=id.trim();
+  const eventCollection=await events();
+  const event=await eventCollection.findOne({_id:ObjectId(id)});
+  if(!event){
+    throw 'No event with that id';
+  }
+  event._id=event._id.toString();
+  return event;
+
+}
+
+
+async function addComment(eventId,userId,comment,datePosted){
+  const newComment= {
+    _id:ObjectId(),
+    userId:userId,
+    comment:comment,
+    datePosted:datePosted,
+  }
+
+  const eventCollection= await events();
+  await eventCollection.updateOne({_id:ObjectId(eventId)},{$push:{comments:newComment}});
+  newComment._id=newAlbumInfo._id.toString();
+  return newComment;
+}
+
+
