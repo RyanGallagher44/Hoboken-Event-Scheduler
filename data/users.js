@@ -31,7 +31,7 @@ async function get(id) {
     const user = await userCollection.findOne({ _id: ObjectId(id) });
     if (user === null) throw `There is no user with the ID of ${id}`;
 
-    return {ok: "user found"};
+    return user;
 }
 
 module.exports = {
