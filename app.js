@@ -16,11 +16,35 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(session({
-    name: 'AuthCookie',
-    secret: 'This is a test of the emergency broadcast system.',
-    resave: false,
-    saveUninitialized: true
+  name: 'AuthCookie',
+  secret: 'This is a test of the emergency broadcast system.',
+  resave: false,
+  saveUninitialized: true
 }));
+
+app.use('/events', (req, res, next) => {
+  if (!req.session.userId) {
+    res.status(403).render('shows/user_not_loggedin', {title: '403 - Not logged in'});
+  } else {
+    next();
+  }
+});
+
+app.use('/logout', (req, res, next) => {
+  if (!req.session.userId) {
+    res.status(403).render('shows/user_not_loggedin', {title: '403 - Not logged in'});
+  } else {
+    next();
+  } 
+});
+
+app.use('/user', (req, res, next) => {
+  if (!req.session.userId) {
+    res.status(403).render('shows/user_not_loggedin', {title: '403 - Not logged in'});
+  } else {
+    next();
+  } 
+});
 
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');

@@ -34,7 +34,7 @@ async function check(email, password) {
     const userCollection = await users();
 
     const user = await userCollection.findOne({email: email});
-    if (user === null) throw "Either the email of password is invalid";
+    if (user === null) throw "Either the email or password is invalid";
 
     const hashedPassword = await userCollection.findOne({email: email}, {projection: {_id: 0, hashedPassword: 1}});
 

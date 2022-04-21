@@ -19,7 +19,7 @@ router.post('/login', async (req, res) => {
             res.redirect('/events');
         }
     } catch (e) {
-        res.status(404).json({error: e});
+        res.render('shows/login', {title: 'Login', error: e})
     }
 });
 
