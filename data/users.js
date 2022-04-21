@@ -1,15 +1,24 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
+const bcrypt = require('bcrypt');
+const saltRounds = 16;
+const { ObjectId } = require('mongodb');
 
-async function create(firstName, lastName, email, age, gender, regEvents, interests, hashedPassword) {
+async function create(firstName, lastName, email, age, password, passwordConfirm) {
     const userCollection = await users();
+
+    if (password !== passwordConfirm) throw "Passwords do not match!";
+
+    const checkIfEmailExists = await userCollection.findOne({email: email});
+    if (checkIfEmailExists !== null) throw "This email is already registered with us!";
+
+    const hashedPassword = await bcrypt.hash(passwordConfirm, saltRounds);
 
     let newUser = {
         firstName: firstName,
         lastName: lastName,
         email: email,
         age: age,
-        gender: gender,
         regEvents: [],
         interests: [],
         hashedPassword: hashedPassword
@@ -18,11 +27,30 @@ async function create(firstName, lastName, email, age, gender, regEvents, intere
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw "Could not create user";
 
-    const newId = insertInfo.insertedId.toString();
-    const user = await this.get(newId);
-    user._id = user._id.toString();
+    return {userCreated: true};
+}
 
-    return {ok: "user created"};
+async function check(email, password) {
+    const userCollection = await users();
+
+    const user = await userCollection.findOne({email: email});
+    if (user === null) throw "Either the email of password is invalid";
+
+    const hashedPassword = await userCollection.findOne({email: email}, {projection: {_id: 0, hashedPassword: 1}});
+
+    const hashedPassword2 = hashedPassword.hashedPassword;
+
+    let compareToMatch = false;
+
+    try {
+        compareToMatch = await bcrypt.compare(password, hashedPassword2);
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (!compareToMatch) throw "Either the email or password is invalid";
+
+    return {userAuthenticated: user._id.toString()};
 }
 
 async function get(id) {
@@ -36,5 +64,6 @@ async function get(id) {
 
 module.exports = {
     create,
+    check,
     get
 }

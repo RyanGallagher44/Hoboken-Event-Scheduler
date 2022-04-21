@@ -25,7 +25,6 @@ app.use(session({
 app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-
 configRoutes(app);
 
 app.listen(3000, () => {
