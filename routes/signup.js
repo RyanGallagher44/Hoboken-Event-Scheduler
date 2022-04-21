@@ -5,7 +5,7 @@ const userData = data.users;
 
 router.get('/', async (req, res) => {
     if (req.session.userId) {
-        res.redirect('/events');   
+        res.redirect('/events');  
     } else {
         res.render('shows/signup', {title: 'Sign Up'});
     }
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
             res.redirect('/');
         }
     } catch (e) {
-        res.status(404).json({error: e});
+        res.render('shows/signup', {title: 'Sign Up', error: e})
     }
 });
 

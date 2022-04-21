@@ -21,6 +21,10 @@ url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
     text-align: center;
 }
 
+#hbe-header-nli {
+    text-align: center;
+}
+
 #login-div {
     margin: auto;
     margin-top: 50px;
@@ -55,6 +59,10 @@ url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
     text-align: center;
 }
 
+#nli-msg {
+    text-align: center;
+}
+
 #login-form-div {
     text-align: center;
 }
@@ -74,6 +82,11 @@ url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 }
 
 #log-back-link {
+    margin-top: 30px;
+    text-align: center;
+}
+
+#nli-link {
     margin-top: 30px;
     text-align: center;
 }
@@ -106,6 +119,12 @@ nav li {
     margin: 1em;
 }
 
-p {
-    color: black;
+.login-error {
+    text-align: center;
+    color: red;
+}
+
+.signup-error {
+    text-align: center;
+    color: red;
 }
