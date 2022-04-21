@@ -4,7 +4,8 @@
   "description": "CS546 Final Project",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "express-handlebars": "^6.0.5",
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
+    "moment": "^2.29.3",
     "mongodb": "^4.5.0"
   }
 }

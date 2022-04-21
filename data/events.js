@@ -1,12 +1,25 @@
 const mongoCollections = require('../config/mongoCollections');
 const events = mongoCollections.events;
 const { ObjectId } = require('mongodb');
+const validation = require('../validation');
 
-async function create(name, users_registered, creator, date, time, location, description, tags){
+const createEvent = async function createEvent(name, users_registered, creator, date, time, location, description, tags){
     //check all the inputs
+    name = validation.checkString(name, 'Name');
+    //change this to id
+    creator = validation.checkString(creator, 'Creator');
+    date = validation.checkDate(date, 'Date');
+    time = validation.checkTime(time, 'Time');
+    location = validation.checkString(location, 'Location');
+    description = validation.checkString(description, 'Description');
+    tags = validation.checkStringArray(tags, 'Tags', 1);
+    //check creator ID here for valid user
+
+    const eventCollection = await events();
+
     let newEvent = {
         name: name,
-        users_registered: users_registered,
+        users_registered: [],
         creator: creator,
         date: date,
         time: time,
@@ -14,10 +27,13 @@ async function create(name, users_registered, creator, date, time, location, des
         description: description,
         tags: tags
     }
-    const insertInfo = await bandCollection.insertOne(newEvent);
+
+    const insertInfo = await eventCollection.insertOne(newEvent);
     if (!insertInfo.acknowledged || !insertInfo.insertedId){
       throw 'Could not add event';
     }
+
+    return true;
 }
 
 async function get(id){
@@ -49,3 +65,6 @@ async function addComment(eventId,userId,comment,datePosted){
 }
 
 
+module.exports = {
+  createEvent
+}
