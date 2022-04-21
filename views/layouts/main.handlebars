@@ -6,11 +6,28 @@
     <title>{{title}}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/public/main_styles.css">
+    <link rel="stylesheet" href="/public/css/main_styles.css">
   </head>
   <body>
-      <main>
-        {{{body}}}
-      </main>
+    {{#if loggedIn}}
+    <header>
+      <nav>
+        <ul>
+          <li>Home</li>
+          <li>Add Event</li>
+          <li>My Registered Events</li>
+          <li>Calendar</li>
+          <li>View Profile</li>
+          <li>Logout</li>
+        </ul>
+      </nav>
+    </header>
+    {{/if}}
+    <main>
+      {{{body}}}
+    </main>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script src="/public/js/client.js"></script>
   </body>
 </html>

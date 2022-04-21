@@ -1,0 +1,40 @@
+<h1 id="hbe-header-signup">Hoboken Event Scheduler</h1>
+<hr>
+<div id="signup-div">
+    <h2 id="signup-header">Sign Up</h2>
+    <div id="signup-form-div">
+        <form id="signup-form" method="POST" action="/signup">
+            <label for="signup-firstname">First Name</label>
+            <br>
+            <input class="signup-input" id="signup-firstname" name="signup_firstname" type="text">
+            <br>
+            <label for="signup-lastname">Last Name</label>
+            <br>
+            <input class="signup-input" id="signup-lastname" name="signup_lastname" type="text">
+            <br>
+            <label for="signup-email">Email</label>
+            <br>
+            <input class="signup-input" id="signup-email" name="signup_email" type="email">
+            <br>
+            <label for="signup-age">Age</label>
+            <br>
+            <select class="signup-input" id="signup-age" name="signup_age"></select>
+            <br>
+            <label for="signup-password">Password</label>
+            <br>
+            <input class="signup-input" id="signup-password" name="signup_password" type="password">
+            <br>
+            <label for="signup-password-confirm">Confirm Password</label>
+            <br>
+            <input class="signup-input" id="signup-password-confirm" name="signup_passwordconfirm" type="password">
+            <br>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <div id="login-link">
+        <a href="/">Already registered? Click here!</a>
+    </div>
+</div>
+{{#if error}}
+<p class="signup-error">{{{error}}}</p>
+{{/if}}

@@ -1,0 +1,24 @@
+<h1 id="hbe-header-login">Hoboken Event Scheduler</h1>
+<hr>
+<div id="login-div">
+    <h2 id="login-header">Login</h2>
+    <div id="login-form-div">
+        <form id="login-form" method="POST" action="/login">
+            <label for="login-email">Email</label>
+            <br>
+            <input class="login-input" id="login-email" name="login_email" type="email">
+            <br>
+            <label for="login-password">Password</label>
+            <br>
+            <input class="login-input" id="login-password" name="login_password" type="password">
+            <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div id="signup-link">
+        <a href="/signup">Need to register? Click here!</a>
+    </div>
+</div>
+{{#if error}}
+<p class="login-error">{{{error}}}</p>
+{{/if}}
