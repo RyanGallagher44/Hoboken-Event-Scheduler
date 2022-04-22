@@ -27,7 +27,9 @@ async function create(firstName, lastName, email, age, password, passwordConfirm
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw "Could not create user";
 
-    return {userCreated: true};
+    //there might be a better way to get the id of the user but this way should work for now
+    const user = await userCollection.findOne({email: email});
+    return {userCreated: true, id: user._id.toString()};
 }
 
 async function check(email, password) {
