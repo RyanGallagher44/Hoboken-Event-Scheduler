@@ -17,8 +17,9 @@ const createEvent = async function createEvent(name, users_registered, creator, 
 
     const eventCollection = await events();
 
-    let newEvent = {
+    let newEvent = { //changed so events start out with empty comments field
         name: name,
+        comments: [],
         users_registered: [],
         creator: creator,
         date: date,
@@ -39,6 +40,7 @@ const createEvent = async function createEvent(name, users_registered, creator, 
 async function get(id){
   //check all the inputs
   id=id.trim();
+  id = validation.checkId(id, 'Event ID');
   const eventCollection=await events();
   const event=await eventCollection.findOne({_id:ObjectId(id)});
   if(!event){
@@ -50,7 +52,7 @@ async function get(id){
 }
 
 
-async function addComment(eventId,userId,comment,datePosted){
+async function addComment(eventId,userId,comment,datePosted){ //check these inputs
   const newComment= {
     _id:ObjectId(),
     userId:userId,
@@ -59,12 +61,30 @@ async function addComment(eventId,userId,comment,datePosted){
   }
 
   const eventCollection= await events();
-  await eventCollection.updateOne({_id:ObjectId(eventId)},{$push:{comments:newComment}});
-  newComment._id=newAlbumInfo._id.toString();
+  await eventCollection.updateOne({_id:ObjectId(eventId)},{$push:{comments:newComment}}); //maybe check if this errors?
+  newComment._id=newComment._id.toString(); //fixed typo here
   return newComment;
+}
+
+async function addUserToEvent(eventId, userId) { //Need to update events and users collections
+  eventId = validation.checkId(eventId, 'Event ID');
+  userId = validation.checkId(userId, 'User ID');
+  const eventCollection= await events();
+  //Check if user is already registered
+  let event = await eventCollection.findOne({_id:ObjectId(eventId)});
+  if (!event) throw "No event with that ID";
+  if (!(event.users_registered.includes(userId))) { //Only register user for event if they arent already registered
+    let updated = await eventCollection.updateOne({_id: ObjectId(eventId)}, {$push:{users_registered: userId}});
+    //if (!updated.insertedId) throw "Could not register user to event";
+  }
+
+  return true;
 }
 
 
 module.exports = {
-  createEvent
+  createEvent,
+  get,
+  addComment,
+  addUserToEvent
 }
