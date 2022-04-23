@@ -3,6 +3,7 @@ const users = mongoCollections.users;
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
+const validation = require('../validation');
 
 async function create(firstName, lastName, email, age, password, passwordConfirm) {
     const userCollection = await users();
@@ -55,7 +56,7 @@ async function check(email, password) {
     return {userAuthenticated: user._id.toString()};
 }
 
-async function get(id) {
+async function get(id) { //validate
     const userCollection = await users();
 
     const user = await userCollection.findOne({ _id: ObjectId(id) });
@@ -64,8 +65,25 @@ async function get(id) {
     return user;
 }
 
+async function joinEvent(eventId, userId) {
+    eventId = validation.checkId(eventId, 'Event ID');
+    userId = validation.checkId(userId, 'User ID');
+    const userCollection= await users();
+
+    //Check if user is already registered
+    let user = await userCollection.findOne({_id:ObjectId(userId)});
+    if (!user) throw "No user with that ID";
+    if (!(user.regEvents.includes(eventId))) { //Only register user for event if they arent already registered
+        let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{regEvents: eventId}});
+        //if (!updated.insertedId) throw "Could not register user to event";
+    }
+    
+    return true;
+}
+
 module.exports = {
     create,
     check,
-    get
+    get,
+    joinEvent
 }

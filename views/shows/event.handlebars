@@ -1,0 +1,61 @@
+<h1>{{event_name}}</h1>
+
+<h2>Event Information</h2>
+<dl>
+    <dt>Event Creator</dt>
+    <dd>{{event_creator}}</dd>
+    <dt>Date of Event</dt>
+    <dd>{{event_date}}</dd>
+    <dt>Event Time</dt>
+    <dd>{{event_time}}</dd>
+    <dt>Event Location</dt>
+    <dd>{{event_location}}</dd>
+    <dt>Description</dt>
+    <dd>{{event_description}}</dd>
+    <dt>Tags</dt>
+    <dd>
+        <ul>
+            {{#each event_tags}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </dd>
+</dl>
+
+<form action="/events/join" method="post" id="join_event_data">
+    <label hidden for="eid">event id</label>
+    <input hidden id="eid" name="event_id" value={{event_id}} />
+    <label hidden for="uid">event id</label>
+    <input hidden id="uid" name="user_id" value={{user_id}} />
+    <button type="submit">Join Event</button>
+</form>
+
+<form action="/comment" method="post" id="add_comment">
+    <label for="comment_text">Comment</label>
+    <input id="comment_text" name="comment_text" />
+    <label hidden for="eid">event id</label>
+    <input hidden id="eid" name="event_id" value={{event_id}} />
+    <label hidden for="uid">event id</label>
+    <input hidden id="uid" name="user_id" value={{user_id}} />
+    <button type="submit">Post Comment</button>
+</form>
+
+{{#if event_comments.length}}
+<div class="comments">
+    <h3>Comments</h3>
+    <ul>
+        {{#each event_comments}}
+            <li>
+                <ul>
+                    <li>{{comment}}</li>
+                    <li class="comment_info">Posted by: {{name}} on {{datePosted}}</li>
+                </ul>
+            </li>
+        {{/each}}
+    </ul>
+</div>
+{{/if}}
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="/public/js/join_event.js"></script>
