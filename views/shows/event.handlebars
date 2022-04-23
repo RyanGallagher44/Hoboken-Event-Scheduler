@@ -1,5 +1,13 @@
 <h1>{{event_name}}</h1>
 
+<form action="/events/join" method="post" id="join_event_data">
+    <label hidden for="eid">event id</label>
+    <input hidden id="eid" name="event_id" value={{event_id}} />
+    <label hidden for="uid">event id</label>
+    <input hidden id="uid" name="user_id" value={{user_id}} />
+    <button type="submit">Join Event</button>
+</form>
+
 <h2>Event Information</h2>
 <dl>
     <dt>Event Creator</dt>
@@ -21,14 +29,6 @@
         </ul>
     </dd>
 </dl>
-
-<form action="/events/join" method="post" id="join_event_data">
-    <label hidden for="eid">event id</label>
-    <input hidden id="eid" name="event_id" value={{event_id}} />
-    <label hidden for="uid">event id</label>
-    <input hidden id="uid" name="user_id" value={{user_id}} />
-    <button type="submit">Join Event</button>
-</form>
 
 <form action="/comment" method="post" id="add_comment">
     <label for="comment_text">Comment</label>
