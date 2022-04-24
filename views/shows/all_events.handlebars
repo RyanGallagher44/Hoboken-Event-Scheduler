@@ -1,3 +1,32 @@
+
 <h1 id="hbe-header-allevents">Hoboken Event Scheduler</h1>
+<div id="form">
+    <form action="/events/search" method="POST"> 
+        <label for="search">Search By Event</label>
+        <input id="search" name="eventSearchTerm"/>
+        <button type="submit">Submit</button>
+    </form>
+    {{#if hasErrorSearch}}
+    <p>{{error}}</p>
+    {{/if}}
+</div>
+
+<div id="form">
+    <form action="/events/filter" method="POST">
+        <label for="searchTag">Search By Tag</label>
+        <input id="searchTag" name="eventSearchTag"/>
+        <button type="submit">Submit</button>
+    </form>
+    {{#if hasErrorTag}}
+    <p>{{error}}</p>
+    {{/if}}
+</div>
 <hr>
-<h2 id="allevents-header">All Events</h2>
+<section>
+    <h2 id="allevents-header">All Events</h2>
+    <ul id="events">
+        {{#each events}}
+            <li><a id="event" href="/events/{{_id}}">{{name}}</a></li>
+        {{/each}}
+    </ul>
+</section>
