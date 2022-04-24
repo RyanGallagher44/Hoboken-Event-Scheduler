@@ -1,0 +1,10 @@
+<div id="regEvents">
+    <h1>{{userName}}'s Registered Events</h1>
+    {{#each events}}
+    <ul id="events">
+        {{#each events}}
+            <li><a id="event" href="/events/{{_id}}">{{name}}</a></li>
+        {{/each}}
+    </ul>
+    {{/each}}
+</div>

@@ -120,11 +120,25 @@ async function remove(id) {
     return {userDeleted: true, id: id};
 }
 
+async function getRegisteredEvents(userId){
+    //gets the list of eventids from user and returns a list of full event objects
+    validation.checkId(userId);
+    let user = await get(userId);
+    let evList = [];
+    const eventCollection=await events();
+    for (let evId of user.regEvents){
+        let event=await eventCollection.findOne({_id:ObjectId(evId)});
+        evList.push(event);
+    }
+    return evList;
+}
+
 module.exports = {
     create,
     check,
     get,
     joinEvent,
     remove,
-    unjoinEvent
+    unjoinEvent,
+    getRegisteredEvents
 }
