@@ -29,6 +29,13 @@
         <div id="join-event-form">
             {{#if alreadyRegistered}}
                 <p>You are already registered for this event!</p>
+                <form action="/events/unjoin" method="post" id="unjoin_event_data">
+                    <label hidden for="eid">event id</label>
+                    <input hidden id="eid" name="event_id" value={{event_id}} />
+                    <label hidden for="uid">event id</label>
+                    <input hidden id="uid" name="user_id" value={{user_id}} />
+                    <button type="submit">Unregister for Event</button>
+                </form>
             {{else}}
                 <form action="/events/join" method="post" id="join_event_data">
                     <label hidden for="eid">event id</label>

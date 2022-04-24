@@ -81,10 +81,20 @@ async function addUserToEvent(eventId, userId) { //Need to update events and use
   return true;
 }
 
+async function removeUserFromEvent(eventId, userId) { //Need to update events and users collections
+  eventId = validation.checkId(eventId, 'Event ID');
+  userId = validation.checkId(userId, 'User ID');
+  const eventCollection= await events();
+
+  let updated = await eventCollection.updateOne({_id: ObjectId(eventId)}, {$pull:{users_registered: userId}});
+
+  return true;
+}
 
 module.exports = {
   createEvent,
   get,
   addComment,
-  addUserToEvent
+  addUserToEvent,
+  removeUserFromEvent
 }

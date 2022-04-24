@@ -82,6 +82,17 @@ async function joinEvent(eventId, userId) {
     return true;
 }
 
+async function unjoinEvent(eventId, userId) {
+    eventId = validation.checkId(eventId, 'Event ID');
+    userId = validation.checkId(userId, 'User ID');
+    const userCollection= await users();
+
+    //Check if user is already registered
+    let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{regEvents: eventId}});
+    
+    return true;
+}
+
 async function remove(id) {
     const userCollection = await users();
     const eventCollection = await events();
@@ -114,5 +125,6 @@ module.exports = {
     check,
     get,
     joinEvent,
-    remove
+    remove,
+    unjoinEvent
 }

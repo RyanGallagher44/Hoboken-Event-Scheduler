@@ -163,9 +163,31 @@ router.post('/join', async (req, res) => {
     }
     
     res.redirect('/events/'); //After you join, go back home
-
-
-    
 });
+
+router.post('/unjoin', async (req, res) => {
+    let event_id = undefined;
+    let user_id = undefined
+    try {
+        event_id = validation.checkId(req.body.event_id, 'Event ID');
+        user_id = validation.checkId(req.body.user_id, 'User ID');
+    } catch (error) { //this shouldnt happen
+        res.status(400).json({error});
+        return;
+    }
+
+    //Now, try to unjoin the event
+
+    try {
+        events.removeUserFromEvent(event_id, user_id);
+        userData.unjoinEvent(event_id, user_id);
+    } catch (error) { //this also shouldn't happen
+        res.status(400).json({error});
+        return;
+    }
+    
+    res.redirect('/events/'); //After you unjoin, go back home
+});
+
 
 module.exports = router;
