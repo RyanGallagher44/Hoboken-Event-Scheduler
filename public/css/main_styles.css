@@ -5,6 +5,33 @@ url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
     font-family: 'Varela Round', sans-serif;
 }
 
+#form {
+    text-align:center;
+}
+
+form {
+    display:inline-block;
+}
+
+#event {
+    position: relative;
+    text-align:center;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    margin: .5em 0;
+    background: #DAD2CA;
+    color: #444;
+    text-decoration: none;
+    border-radius: .3em;
+    transition: .3s ease-out;
+  }
+
+#events {
+    list-style: none; 
+    padding: 0;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  }
+
 #hbe-header-login {
     text-align: center;
 }
