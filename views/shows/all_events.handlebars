@@ -10,10 +10,10 @@
     <p>{{error}}</p>
     {{/if}}
 </div>
-
+<br>
 <div id="form">
     <form action="/events/filter" method="POST">
-        <label for="searchTag">Search By Tag</label>
+        <label for="searchTag">Filter By Tag</label>
         <select id="searchTag" name="eventSearchTag">
             {{#each tags}}
             <option val="{{{this}}}">{{{this}}}</option>
