@@ -7,10 +7,12 @@ const allEvents=data.allEvents;
 const validation = require('../validation');
 
 router.get('/', async (req, res) => {
+    let allTags = await allEvents.get_all_tags();
+    console.log(allTags);
     if (req.session.userId) {
         try{
             let eventList=await allEvents.get_all_events();
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         } catch(e){
             res.status(400).json({e});
             return;
@@ -26,38 +28,40 @@ router.get('/add', async (req, res) => {
 
 router.post('/search',async(req,res) => {
     let search=req.body.eventSearchTerm;
+    let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(search,'Search Term');
         try{
             let eventList=await allEvents.search_for_event(search);
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         } catch(e){
             res.status(400);
-            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         }
         
     }catch(e){
         res.status(400);
-        res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         
     }
 });
 
 router.post('/filter',async(req,res) => {
     let tag=req.body.eventSearchTag;
+    let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(tag,'Tag Term');
         try{
             let eventList=await allEvents.get_events_by_tag(tag);
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         } catch(e){
             res.status(400);
-            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         }
         
     }catch(e){
         res.status(400);
-        res.render('shows/all_events', {title: "All Events", error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        res.render('shows/all_events', {title: "All Events", error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
         
     }
 });
