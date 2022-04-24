@@ -8,7 +8,6 @@ const validation = require('../validation');
 
 router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
-    console.log(allTags);
     if (req.session.userId) {
         try{
             let eventList=await allEvents.get_all_events();
@@ -129,10 +128,12 @@ router.get('/:id', async (req, res) => {
 
         let loggedInUser = await userData.get(req.session.userId);
 
+        console.log(event.numAttending);
+
         if (loggedInUser.regEvents.includes(id)) {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true});
+            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.numAttending});
         } else {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list});
+            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.numAttending});
         }        
     } catch (error) {
         console.log(error);

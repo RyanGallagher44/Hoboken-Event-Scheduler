@@ -78,6 +78,7 @@ async function joinEvent(eventId, userId) {
     eventId = validation.checkId(eventId, 'Event ID');
     userId = validation.checkId(userId, 'User ID');
     const userCollection= await users();
+    const eventCollection = await events();
 
     //Check if user is already registered
     let user = await userCollection.findOne({_id:ObjectId(userId)});
@@ -86,6 +87,8 @@ async function joinEvent(eventId, userId) {
         let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{regEvents: eventId}});
         //if (!updated.insertedId) throw "Could not register user to event";
     }
+
+    await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: 1}});
     
     return true;
 }
@@ -94,10 +97,13 @@ async function unjoinEvent(eventId, userId) {
     eventId = validation.checkId(eventId, 'Event ID');
     userId = validation.checkId(userId, 'User ID');
     const userCollection= await users();
+    const eventCollection = await events();
 
     //Check if user is already registered
     let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{regEvents: eventId}});
     
+    await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: -1}});
+
     return true;
 }
 

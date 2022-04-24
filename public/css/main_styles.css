@@ -196,6 +196,10 @@ a:visited {
     border-radius: 10px;
 }
 
+#num-attending-div {
+    text-align: center;
+}
+
 #join-event-form {
     margin-top: 30px;
     text-align: center;
