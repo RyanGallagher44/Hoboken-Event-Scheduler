@@ -18,6 +18,24 @@ async function get_all_events() { //Get and return a list of all the events
     return eventList;
 }
 
+async function get_all_tags() {
+    const eventCollection = await events();
+
+    const eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Error: Could not get all tags";
+
+    let tags = [];
+    eventList.forEach((event) => {
+        (event.tags).forEach((tag) => {
+            if (!tags.includes(tag)) {
+                tags.push(tag);
+            }
+        });
+    });
+
+    return tags;
+}
+
 async function get_events_by_tag(tag) { //Get and return a list of events that contain the specific tag
     //validate input
     tag = tag.trim();
@@ -49,5 +67,6 @@ async function search_for_event(search_term) {
 module.exports = {
     get_all_events,
     get_events_by_tag,
-    search_for_event
+    search_for_event,
+    get_all_tags
 };
