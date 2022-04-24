@@ -1,22 +1,41 @@
 <h1 id="hbe-header-login">Hoboken Event Scheduler</h1>
 <hr>
-<div id="login-div">
-    <h2 id="login-header">Login</h2>
-    <div id="login-form-div">
-        <form id="login-form" method="POST" action="/login">
-            <label for="login-email">Email</label>
+<div class="flex-container">
+    <div class="flex-child welcome">
+        <div id="welcome-div">
+            <h2>Welcome!</h2>
+            <p>
+            This is the Hoboken Event Scheduler - a platform to market upcoming events in Hoboken.
+            </p>
             <br>
-            <input class="login-input" id="login-email" name="login_email" type="email">
-            <br>
-            <label for="login-password">Password</label>
-            <br>
-            <input class="login-input" id="login-password" name="login_password" type="password">
-            <br>
-            <button type="submit">Login</button>
-        </form>
+            <p>
+            Our service makes it very easy for people in the Hoboken area to find events to attend and/or participate
+            in, while also allowing for individuals and businesses or organizations to advertise and promote various
+            activites throughout the city.
+            </p>
+        </div>
     </div>
-    <div id="signup-link">
-        <a href="/signup">Need to register? Click here!</a>
+    
+    <div class="flex-child login">
+        <div id="login-div">
+            <h2 id="login-header">Login</h2>
+            <div id="login-form-div">
+                <form id="login-form" method="POST" action="/login">
+                    <label for="login-email">Email</label>
+                    <br>
+                    <input class="login-input" id="login-email" name="login_email" type="email">
+                    <br>
+                    <label for="login-password">Password</label>
+                    <br>
+                    <input class="login-input" id="login-password" name="login_password" type="password">
+                    <br>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            <div id="signup-link">
+                <a href="/signup">Need to register? Click here!</a>
+            </div>
+        </div>
     </div>
 </div>
 {{#if error}}
