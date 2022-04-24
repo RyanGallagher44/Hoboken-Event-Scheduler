@@ -1,5 +1,9 @@
 <h1>{{event_name}}</h1>
 
+<a href="/">Home</a>
+<br>
+<br>
+
 <form action="/events/join" method="post" id="join_event_data">
     <label hidden for="eid">event id</label>
     <input hidden id="eid" name="event_id" value={{event_id}} />
@@ -33,10 +37,10 @@
 <form action="/comment" method="post" id="add_comment">
     <label for="comment_text">Comment</label>
     <input id="comment_text" name="comment_text" />
-    <label hidden for="eid">event id</label>
-    <input hidden id="eid" name="event_id" value={{event_id}} />
-    <label hidden for="uid">event id</label>
-    <input hidden id="uid" name="user_id" value={{user_id}} />
+    <label hidden for="eid2">event id</label>
+    <input hidden id="eid2" name="event_id" value={{event_id}} />
+    <label hidden for="uid2">event id</label>
+    <input hidden id="uid2" name="user_id" value={{user_id}} />
     <button type="submit">Post Comment</button>
 </form>
 
