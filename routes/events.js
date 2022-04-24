@@ -3,11 +3,18 @@ const router = express.Router();
 const data = require('../data');
 const events = data.events;
 const userData = data.users;
+const allEvents=data.allEvents;
 const validation = require('../validation');
 
 router.get('/', async (req, res) => {
     if (req.session.userId) {
-        res.render('shows/all_events', {title: "All Events", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        try{
+            let eventList=await allEvents.get_all_events();
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        } catch(e){
+            res.status(400).json({e});
+            return;
+        }
     }
 });
 
@@ -15,6 +22,44 @@ router.get('/add', async (req, res) => {
     //add creator check?
 
     res.render('events/add', {title: "Create Event"});
+});
+
+router.post('/search',async(req,res) => {
+    let search=req.body.eventSearchTerm;
+    try{
+        search=validation.checkString(search,'Search Term');
+        try{
+            let eventList=await allEvents.search_for_event(search);
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        } catch(e){
+            res.status(400);
+            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        }
+        
+    }catch(e){
+        res.status(400);
+        res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        
+    }
+});
+
+router.post('/filter',async(req,res) => {
+    let tag=req.body.eventSearchTag;
+    try{
+        search=validation.checkString(tag,'Tag Term');
+        try{
+            let eventList=await allEvents.get_events_by_tag(tag);
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        } catch(e){
+            res.status(400);
+            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        }
+        
+    }catch(e){
+        res.status(400);
+        res.render('shows/all_events', {title: "All Events", error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+        
+    }
 });
 
 router.post('/add', async (req, res) => {
