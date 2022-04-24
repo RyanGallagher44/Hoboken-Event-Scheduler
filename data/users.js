@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
+const events = mongoCollections.events;
 const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
@@ -83,6 +84,22 @@ async function joinEvent(eventId, userId) {
 
 async function remove(id) {
     const userCollection = await users();
+    const eventCollection = await events();
+
+    let eventsCreatedByUser = [];
+    const eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Error: Could not get all events";
+
+    eventList.forEach((event) => {
+        if (event.creator == id) {
+            eventsCreatedByUser.push(event._id.toString());
+        }
+    });
+
+    for (let i = 0; i < eventsCreatedByUser.length; i++) {
+        let deleteEventInfo = await eventCollection.deleteOne({ _id: ObjectId(eventsCreatedByUser[i])});
+        if (deleteEventInfo.deletedCount === 0) throw `Could not delete event with the ID of ${eventsCreatedByUser[i]}`;
+    }
 
     const user = await this.get(id);
 
