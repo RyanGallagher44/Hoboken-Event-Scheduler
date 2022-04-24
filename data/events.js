@@ -26,7 +26,8 @@ const createEvent = async function createEvent(name, users_registered, creator, 
         time: time,
         location: location,
         description: description,
-        tags: tags
+        tags: tags,
+        numAttending: 0
     }
 
     const insertInfo = await eventCollection.insertOne(newEvent);
