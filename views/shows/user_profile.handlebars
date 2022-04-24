@@ -2,4 +2,16 @@
     <h1>{{{name}}}</h1>
     <h2>{{{age}}}</h2>
     <h3>{{{email}}}</h3>
+    <button id="delete-act-btn">Delete Account</button>
+    <div id="delete-act-div" hidden>
+        <p>
+            Are you sure you want to do this? You will be automatically signed out
+            and will be required to create a new account to continue using
+            Hoboken Event Scheduler.
+        </p>
+        <button id="cancel-delete-act-btn">Cancel</button>
+        <form id="delete-act-form" method="POST" action="/user">
+            <button id="confirm-delete-act-btn" type="submit">DELETE</button>
+        </form>
+    </div>
 </div>

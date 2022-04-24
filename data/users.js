@@ -81,9 +81,21 @@ async function joinEvent(eventId, userId) {
     return true;
 }
 
+async function remove(id) {
+    const userCollection = await users();
+
+    const user = await this.get(id);
+
+    const deleteInfo = await userCollection.deleteOne({ _id: ObjectId(id) });
+    if (deleteInfo.deletedCount === 0) throw `Could not delete user with the ID of ${id}!`;
+
+    return {userDeleted: true, id: id};
+}
+
 module.exports = {
     create,
     check,
     get,
-    joinEvent
+    joinEvent,
+    remove
 }
