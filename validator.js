@@ -39,14 +39,27 @@ function checkStringArray(arr) {
 
 function checkEmail(addr){
     if(!emailValidator.validate(addr)) throw "Error: Invalid email address";
+
+    return addr;
 }
 
+function checkPassword(pwd) {
+    if (!pwd) throw 'You must supply a password!';
 
+    return pwd;
+}
 
+function checkConfirmPassword(pwd) {
+    if (!pwd) throw 'You must confirm your password!';
+
+    return pwd;
+}
 
 module.exports = {
     checkId,
     checkString,
     checkStringArray,
-    checkEmail
+    checkEmail,
+    checkPassword,
+    checkConfirmPassword
 }

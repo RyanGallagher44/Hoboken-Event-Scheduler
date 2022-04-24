@@ -5,9 +5,17 @@ const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
+const validator = require('../validator');
 
 async function create(firstName, lastName, email, age, password, passwordConfirm) {
     const userCollection = await users();
+
+    firstName = validation.checkString(firstName, 'First name');
+    lastName = validation.checkString(lastName, 'Last name');
+    email = validator.checkEmail(email);
+    // validate age?
+    password = validator.checkPassword(password);
+    passwordConfirm = validator.checkConfirmPassword(passwordConfirm);
 
     if (password !== passwordConfirm) throw "Passwords do not match!";
 
@@ -106,6 +114,14 @@ async function remove(id) {
             eventsCreatedByUser.push(event._id.toString());
         }
     });
+
+    for (let i = 0; i < eventList.length; i++) {
+        for (let j = 0; j < eventList[i].comments.length; j++) {
+            if (eventList[i].comments[j].userId == id) {
+                await eventCollection.updateOne({_id: ObjectId(eventList[i]._id.toString())}, {$pull:{comments: eventList[i].comments[j]}});
+            }
+        }
+    }
 
     for (let i = 0; i < eventsCreatedByUser.length; i++) {
         let deleteEventInfo = await eventCollection.deleteOne({ _id: ObjectId(eventsCreatedByUser[i])});
