@@ -6,6 +6,7 @@ const saltRounds = 16;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const validator = require('../validator');
+const eventData = require('../data/events');
 
 async function create(firstName, lastName, email, age, password, passwordConfirm) {
     const userCollection = await users();
@@ -135,6 +136,11 @@ async function remove(id) {
     }
 
     const user = await this.get(id);
+
+    for (let i = 0; i < user.regEvents.length; i++) {
+        eventData.removeUserFromEvent(user.regEvents[i], user._id.toString());
+        await eventCollection.updateOne({_id: ObjectId(user.regEvents[i])},{$inc:{numAttending: -1}});
+    }
 
     const deleteInfo = await userCollection.deleteOne({ _id: ObjectId(id) });
     if (deleteInfo.deletedCount === 0) throw `Could not delete user with the ID of ${id}!`;
