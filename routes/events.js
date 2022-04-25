@@ -126,14 +126,10 @@ router.get('/:id', async (req, res) => {
         let eventCreator = await userData.get(event.creator.toString());
         let event_creator_name = `${eventCreator.firstName} ${eventCreator.lastName}`;
 
-        let loggedInUser = await userData.get(req.session.userId);
-
-        console.log(event.numAttending);
-
-        if (loggedInUser.regEvents.includes(id)) {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.numAttending});
+        if (event.users_registered.includes(req.session.userId)) {
+            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length});
         } else {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.numAttending});
+            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length});
         }        
     } catch (error) {
         console.log(error);

@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
 
 router.get('/delete', async (req, res) => {
     try {
-        console.log(await userData.remove(req.session.userId));
+        await userData.remove(req.session.userId);
         res.redirect('/logout');
     } catch (e) {
         console.log(e);

@@ -8,9 +8,12 @@
     }
     $('#signup-age').html(signupAge);
 
-    $('#delete-act-btn').click(function () {
+    $('#delete-act-div').hide();
+
+    $('#delete-act-btn').click(function (event) {
         $('#delete-act-btn').hide();
         $('#delete-act-div').show();
+        event.stopPropagation();
     });
 
     $('#cancel-delete-act-btn').click(function () {
