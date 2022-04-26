@@ -17,16 +17,24 @@ const createEvent = async function createEvent(name, users_registered, creator, 
 
     const eventCollection = await events();
 
+    let numAttending = 0;
+    if (!users_registered) { 
+      users_registered = [];
+    } else {
+      numAttending = users_registered.length;
+    }
+
     let newEvent = { //changed so events start out with empty comments field
         name: name,
         comments: [],
-        users_registered: [],
+        users_registered: users_registered,
         creator: creator,
         date: date,
         time: time,
         location: location,
         description: description,
-        tags: tags
+        tags: tags,
+        numAttending: numAttending
     }
 
     const insertInfo = await eventCollection.insertOne(newEvent);

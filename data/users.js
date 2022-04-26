@@ -5,9 +5,18 @@ const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
+const validator = require('../validator');
+const eventData = require('../data/events');
 
 async function create(firstName, lastName, email, age, password, passwordConfirm) {
     const userCollection = await users();
+
+    firstName = validation.checkString(firstName, 'First name');
+    lastName = validation.checkString(lastName, 'Last name');
+    email = validator.checkEmail(email);
+    // validate age?
+    password = validator.checkPassword(password);
+    passwordConfirm = validator.checkConfirmPassword(passwordConfirm);
 
     if (password !== passwordConfirm) throw "Passwords do not match!";
 
@@ -70,6 +79,7 @@ async function joinEvent(eventId, userId) {
     eventId = validation.checkId(eventId, 'Event ID');
     userId = validation.checkId(userId, 'User ID');
     const userCollection= await users();
+    const eventCollection = await events();
 
     //Check if user is already registered
     let user = await userCollection.findOne({_id:ObjectId(userId)});
@@ -78,6 +88,8 @@ async function joinEvent(eventId, userId) {
         let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{regEvents: eventId}});
         //if (!updated.insertedId) throw "Could not register user to event";
     }
+
+    await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: 1}});
     
     return true;
 }
@@ -86,10 +98,13 @@ async function unjoinEvent(eventId, userId) {
     eventId = validation.checkId(eventId, 'Event ID');
     userId = validation.checkId(userId, 'User ID');
     const userCollection= await users();
+    const eventCollection = await events();
 
     //Check if user is already registered
     let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{regEvents: eventId}});
     
+    await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: -1}});
+
     return true;
 }
 
@@ -107,12 +122,25 @@ async function remove(id) {
         }
     });
 
+    for (let i = 0; i < eventList.length; i++) {
+        for (let j = 0; j < eventList[i].comments.length; j++) {
+            if (eventList[i].comments[j].userId == id) {
+                await eventCollection.updateOne({_id: ObjectId(eventList[i]._id.toString())}, {$pull:{comments: eventList[i].comments[j]}});
+            }
+        }
+    }
+
     for (let i = 0; i < eventsCreatedByUser.length; i++) {
         let deleteEventInfo = await eventCollection.deleteOne({ _id: ObjectId(eventsCreatedByUser[i])});
         if (deleteEventInfo.deletedCount === 0) throw `Could not delete event with the ID of ${eventsCreatedByUser[i]}`;
     }
 
     const user = await this.get(id);
+
+    for (let i = 0; i < user.regEvents.length; i++) {
+        eventData.removeUserFromEvent(user.regEvents[i], user._id.toString());
+        await eventCollection.updateOne({_id: ObjectId(user.regEvents[i])},{$inc:{numAttending: -1}});
+    }
 
     const deleteInfo = await userCollection.deleteOne({ _id: ObjectId(id) });
     if (deleteInfo.deletedCount === 0) throw `Could not delete user with the ID of ${id}!`;

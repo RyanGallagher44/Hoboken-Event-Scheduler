@@ -1,8 +1,7 @@
 <h1 id="event-page-header">{{event_name}}</h1>
 
 <div id="top-of-event-page">
-    <a href="/">Back to Home</a>
-    <br>
+    <a class="btn btn-light" href="/">Back to Home</a>
     <br>
 </div>
 
@@ -25,16 +24,22 @@
             <p>{{{this}}}</p>
             {{/each}}
         </div>
+    </div>
+
+    <div class="flex-child comments" id="entire-comments-div">
+        <div id="num-attending-div">
+            <p># of Users Registered: {{{numAttending}}}</p>
+        </div>
 
         <div id="join-event-form">
             {{#if alreadyRegistered}}
-                <p>You are already registered for this event!</p>
+                <p>You are registered for this event!</p>
                 <form action="/events/unjoin" method="post" id="unjoin_event_data">
                     <label hidden for="eid">event id</label>
                     <input hidden id="eid" name="event_id" value={{event_id}} />
                     <label hidden for="uid">event id</label>
                     <input hidden id="uid" name="user_id" value={{user_id}} />
-                    <button type="submit">Unregister for Event</button>
+                    <button class="btn btn-primary" type="submit">Unregister for Event</button>
                 </form>
             {{else}}
                 <form action="/events/join" method="post" id="join_event_data">
@@ -42,13 +47,11 @@
                     <input hidden id="eid" name="event_id" value={{event_id}} />
                     <label hidden for="uid">event id</label>
                     <input hidden id="uid" name="user_id" value={{user_id}} />
-                    <button type="submit">Register for Event</button>
+                    <button class="btn btn-primary" type="submit">Register for Event</button>
                 </form>
             {{/if}}
         </div>
-    </div>
-
-    <div class="flex-child comments" id="entire-comments-div">
+        
         {{#if event_comments.length}}
         <div class="comments">
             <h3>Comments</h3>
@@ -63,6 +66,11 @@
                 {{/each}}
             </ul>
         </div>
+        {{else}}
+        <div class="comments">
+            <h3>Comments</h3>
+            <p>It's quiet here...</p>
+        </div>
         {{/if}}
 
         <div id="comment-form-div">
@@ -73,7 +81,7 @@
                 <input hidden id="eid2" name="event_id" value={{event_id}} />
                 <label hidden for="uid2">event id</label>
                 <input hidden id="uid2" name="user_id" value={{user_id}} />
-                <button type="submit">Post Comment</button>
+                <button class="btn btn-primary" type="submit">Post</button>
             </form>
         </div>
     </div>

@@ -1,13 +1,15 @@
 
 <h1 id="hbe-header-allevents">Hoboken Event Scheduler</h1>
 <div id="form">
-    <form action="/events/search" method="POST"> 
+    <form action="/events/search" method="POST" id="search_event"> 
         <label for="search">Search By Event</label>
         <input id="search" name="eventSearchTerm"/>
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Search</button>
     </form>
     {{#if hasErrorSearch}}
-    <p>{{error}}</p>
+    <div class="alert alert-danger">
+        {{error}}
+    </div>
     {{/if}}
 </div>
 <br>
@@ -19,18 +21,39 @@
             <option val="{{{this}}}">{{{this}}}</option>
             {{/each}}
         </select>
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Filter</button>
     </form>
     {{#if hasErrorTag}}
-    <p>{{error}}</p>
+    <div class="alert alert-danger">
+        {{error}}
+    </div> 
     {{/if}}
 </div>
 <hr>
 <section>
     <h2 id="allevents-header">All Events</h2>
-    <ul id="events">
+    <div>
         {{#each events}}
-            <li><a id="event" href="/events/{{_id}}">{{name}}</a></li>
+            <div class="card bg-light text-dark text-center all-events-div">
+                <div class="card-body">
+                    <h3 class="card-title">{{name}}</h3>
+                    <p class="card-text">{{description}}</p>
+                    <a class="btn btn-primary" href="/events/{{_id}}">See Event</a>
+                </div>
+
+                <div class="class-footer">
+                    {{#each tags}}
+                        <span class="badge badge-pill badge-secondary">{{{this}}}</span>
+                    {{/each}}
+                </div>
+            </div>
+            {{!-- <li><a id="event" href="/events/{{_id}}">{{name}} 
+            {{#each tags}}
+                <span class="bade badge-pill badge-info">{{{this}}}</span>
+            {{/each}}
+            </a>
+            </li> --}}
+           
         {{/each}}
-    </ul>
+    </div>
 </section>
