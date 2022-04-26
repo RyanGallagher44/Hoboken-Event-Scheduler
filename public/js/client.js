@@ -8,6 +8,7 @@
     }
     $('#signup-age').html(signupAge);
 
+    $('.login-error-div').hide();
     $('#delete-act-div').hide();
 
     $('#delete-act-btn').click(function (event) {
@@ -67,15 +68,23 @@
 
     //Validate login form
     var loginForm = $('#login-form');
-    $(loginForm).on('submit', function(e) {
+    $(loginForm).submit(function(e) {
         e.preventDefault();
         var email = $('#login-email').val();
         var password = $('#login-password').val();
+        console.log(email);
+        console.log(password);
         if (!email || email.trim().length == 0 || !password || password.trim().length == 0) {
-            // empty email or password :(
-            //Google (and by that I mean stackoverflow) says to not validate email address clientside. So we only check if something is present here
+            $('#login-email').addClass('login-input-error');
+            $('#login-password').addClass('login-input-error');
+            $('.login-error-div').show();
+            $('#login-form').trigger('reset');
+            $('#login-email').trigger('focus');
         }
         else {
+            $('#login-email').removeClass('login-input-error');
+            $('#login-password').removeClass('login-input-error');
+            $('.login-error-div').hide();
             $(this).unbind();
             $(this).submit();
         }

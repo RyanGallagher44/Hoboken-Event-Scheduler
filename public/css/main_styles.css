@@ -107,6 +107,20 @@ form {
     text-align: center;
 }
 
+#login-btn {
+    margin-top: 20px;
+}
+
+.login-input-error {
+    border: 1px solid red;
+    border-radius: 2px;
+}
+
+.login-error-div {
+    color: red;
+    margin-top: 30px;
+}
+
 #signup-form-div {
     text-align: center;
 }
@@ -243,6 +257,7 @@ nav.a:visited {
     margin: auto;
     padding: 20px;
     border-radius: 10px;
+    margin-top: 30px;
 }
 
 .comments > h3 {
