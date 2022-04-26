@@ -153,6 +153,10 @@ form {
     margin: 10px;
 }
 
+.dob-div {
+    display: inline-block;
+}
+
 header {
     text-align: center;
 }

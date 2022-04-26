@@ -7,16 +7,19 @@ const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const validator = require('../validator');
 const eventData = require('../data/events');
+const ageCalculator = require('calculate-age').default;
 
-async function create(firstName, lastName, email, age, password, passwordConfirm) {
+async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password, passwordConfirm) {
     const userCollection = await users();
 
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');
     email = validator.checkEmail(email);
-    // validate age?
     password = validator.checkPassword(password);
     passwordConfirm = validator.checkConfirmPassword(passwordConfirm);
+
+    const date = new Date();
+    const age = new ageCalculator(`${dob_y}-${dob_m}-${dob_d}`, `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`).getObject();
 
     if (password !== passwordConfirm) throw "Passwords do not match!";
 
@@ -29,7 +32,7 @@ async function create(firstName, lastName, email, age, password, passwordConfirm
         firstName: firstName,
         lastName: lastName,
         email: email,
-        age: age,
+        age: age.years,
         regEvents: [],
         interests: [],
         hashedPassword: hashedPassword
