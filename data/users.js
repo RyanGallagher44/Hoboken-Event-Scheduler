@@ -157,9 +157,14 @@ async function getRegisteredEvents(userId){
     let user = await get(userId);
     let evList = [];
     const eventCollection=await events();
-    for (let evId of user.regEvents){
-        let event=await eventCollection.findOne({_id:ObjectId(evId)});
-        evList.push(event);
+
+    const eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Error: Could not get all events";
+
+    for (let i = 0; i < eventList.length; i++){
+        if (eventList[i].users_registered.includes(userId)) {
+            evList.push(eventList[i]);
+        }
     }
     return evList;
 }
