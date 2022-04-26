@@ -159,7 +159,7 @@ router.post('/join', async (req, res) => {
         return;
     }
     
-    res.redirect('/events/'); //After you join, go back home
+    res.redirect(`/events/${event_id}`); //After you join, go back home
 });
 
 router.post('/unjoin', async (req, res) => {
@@ -183,7 +183,7 @@ router.post('/unjoin', async (req, res) => {
         return;
     }
     
-    res.redirect('/events/'); //After you unjoin, go back home
+    res.redirect(`/events/${event_id}`); //After you unjoin, go back home
 });
 
 
