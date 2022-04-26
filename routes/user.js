@@ -19,7 +19,7 @@ router.get('/delete', async (req, res) => {
 router.get('/regEvents', async (req, res) => {
     const evList = await userData.getRegisteredEvents(req.session.userId);
     const user = await userData.get(req.session.userId);
-    res.render("shows/registeredEvents", {title: "My Registered Events", userName: user.firstName, events: evList});
+    res.render("shows/registeredEvents", {title: "My Registered Events", userName: user.firstName, events: evList, loggedIn: true});
 })
 
 module.exports = router;
