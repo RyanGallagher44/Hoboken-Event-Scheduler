@@ -4,7 +4,7 @@
     <form action="/events/search" method="POST"> 
         <label for="search">Search By Event</label>
         <input id="search" name="eventSearchTerm"/>
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Search</button>
     </form>
     {{#if hasErrorSearch}}
     <div class="alert alert-danger">
@@ -21,7 +21,7 @@
             <option val="{{{this}}}">{{{this}}}</option>
             {{/each}}
         </select>
-        <button type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Filter</button>
     </form>
     {{#if hasErrorTag}}
     <div class="alert alert-danger">
@@ -34,16 +34,16 @@
     <h2 id="allevents-header">All Events</h2>
     <div>
         {{#each events}}
-            <div class="card bg-light text-dark text-center">
+            <div class="card bg-light text-dark text-center all-events-div">
                 <div class="card-body">
                     <h3 class="card-title">{{name}}</h3>
                     <p class="card-text">{{description}}</p>
-                    <a class="btn btn-success" href="/events/{{_id}}">See Event</a>
+                    <a class="btn btn-primary" href="/events/{{_id}}">See Event</a>
                 </div>
 
                 <div class="class-footer">
                     {{#each tags}}
-                        <span class="bade badge-pill badge-info">{{{this}}}</span>
+                        <span class="badge badge-pill badge-secondary">{{{this}}}</span>
                     {{/each}}
                 </div>
             </div>

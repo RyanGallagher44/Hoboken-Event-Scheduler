@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
         event_date_list.push(event.date);
     }
     
-    res.render('shows/calendar', {title: 'Calendar', loggedIn: true, event_names: event_name_list, event_dates: event_date_list});
+    res.render('shows/calendar', {title: 'Calendar', loggedIn: true, event_names: event_name_list, event_dates: event_date_list, name: `${(await users.get(req.session.userId)).firstName} ${(await users.get(req.session.userId)).lastName}`});
 });
 
 module.exports = router;

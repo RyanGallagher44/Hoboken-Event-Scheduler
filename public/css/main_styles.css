@@ -34,14 +34,17 @@ form {
 
 #hbe-header-login {
     text-align: center;
+    margin-top: 20px;
 }
 
 #hbe-header-signup {
     text-align: center;
+    margin-top: 20px;
 }
 
 #hbe-header-allevents {
     text-align: center;
+    margin-top: 20px;
 }
 
 #hbe-header-logout {
@@ -77,6 +80,7 @@ form {
     width: fit-content;
     padding: 20px;
     border-radius: 10px;
+    margin-bottom: 40px;
 }
 
 #login-header {
@@ -165,17 +169,33 @@ nav li {
     color: red;
 }
 
+#delete-act-btn {
+    margin-top: 20px;
+}
+
+#delete-act-div {
+    margin-top: 20px;
+}
+
 a {
     text-decoration: none;
 }
 
-a:visited:hover {
+nav.a:hover > nav {
     color: blue;
 }
 
-a:visited {
+a:visited:hover > nav {
+    color: blue;
+}
+
+nav.a:visited {
     color: black;
     text-decoration: none;
+}
+
+.all-events-div {
+    padding: 20px;
 }
 
 #top-of-event-page {
@@ -185,6 +205,7 @@ a:visited {
 
 #event-page-header {
     text-align: center;
+    margin-top: 20px;
 }
 
 #event-info {
@@ -243,6 +264,7 @@ a:visited {
 
 .flex-container {
     display: flex;
+    margin-bottom: 40px;
 }
 
 .flex-child {
