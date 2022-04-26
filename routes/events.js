@@ -50,6 +50,9 @@ router.post('/filter',async(req,res) => {
     let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(tag,'Tag Term');
+        if(!allTags.includes(tag)){
+            throw 'Value is not equal to one of the options that the user can select';
+        }
         try{
             let eventList=await allEvents.get_events_by_tag(tag);
             res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
