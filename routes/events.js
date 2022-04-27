@@ -5,13 +5,14 @@ const events = data.events;
 const userData = data.users;
 const allEvents=data.allEvents;
 const validation = require('../validation');
+const xss=require('xss');
 
 router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
-    if (req.session.userId) {
+    if (xss(req.session.userId)) {
         try{
             let eventList=await allEvents.get_all_events();
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         } catch(e){
             res.status(400).json({e});
             return;
@@ -26,27 +27,27 @@ router.get('/add', async (req, res) => {
 });
 
 router.post('/search',async(req,res) => {
-    let search=req.body.eventSearchTerm;
+    let search=xss(req.body.eventSearchTerm);
     let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(search,'Search Term');
         try{
             let eventList=await allEvents.search_for_event(search);
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         } catch(e){
             res.status(400);
-            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         }
         
     }catch(e){
         res.status(400);
-        res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+        res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         
     }
 });
 
 router.post('/filter',async(req,res) => {
-    let tag=req.body.eventSearchTag;
+    let tag=xss(req.body.eventSearchTag);
     let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(tag,'Tag Term');
@@ -55,26 +56,26 @@ router.post('/filter',async(req,res) => {
         }
         try{
             let eventList=await allEvents.get_events_by_tag(tag);
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         } catch(e){
             res.status(400);
-            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         }
         
     }catch(e){
         res.status(400);
-        res.render('shows/all_events', {title: "All Events", error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+        res.render('shows/all_events', {title: "All Events", error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         
     }
 });
 
 router.post('/add', async (req, res) => {
-    let name = req.body.name;
-    let date = req.body.date;
-    let time = req.body.time;
-    let location = req.body.location;
-    let description = req.body.description;
-    let tags = req.body.tags;
+    let name = xss(req.body.name);
+    let date = xss(req.body.date);
+    let time = xss(req.body.time);
+    let location = xss(req.body.location);
+    let description = xss(req.body.description);
+    let tags = xss(req.body.tags);
     
     try{
         name = validation.checkString(name, 'Name');

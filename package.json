@@ -27,6 +27,7 @@
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
     "moment": "^2.29.3",
-    "mongodb": "^4.5.0"
+    "mongodb": "^4.5.0",
+    "xss": "^1.0.11"
   }
 }
