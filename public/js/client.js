@@ -7,6 +7,9 @@ function isLeapYear(year) {
 }
 
 (function ($) {
+    /*
+    Date of Birth on Sign Up Functionality
+    */
     var signupMonth = '';
     var months = ['Select', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     for (let i = 0; i < months.length; i++) {
@@ -70,8 +73,12 @@ function isLeapYear(year) {
         $('#signup-day').val(selectedDay);
         daysInMonth[1] = 28;
     });
+    /*
+    End of DOB functionality
+    */
 
     $('.login-error-div').hide();
+    $('.signup-error-div').hide();
     $('#delete-act-div').hide();
 
     $('#delete-act-btn').click(function (event) {
@@ -131,12 +138,10 @@ function isLeapYear(year) {
 
     //Validate login form
     var loginForm = $('#login-form');
-    $(loginForm).submit(function(e) {
+    $(loginForm).submit(function (e) {
         e.preventDefault();
         var email = $('#login-email').val();
         var password = $('#login-password').val();
-        console.log(email);
-        console.log(password);
         if (!email || email.trim().length == 0 || !password || password.trim().length == 0) {
             $('#login-email').addClass('login-input-error');
             $('#login-password').addClass('login-input-error');
@@ -151,5 +156,45 @@ function isLeapYear(year) {
             $(this).unbind();
             $(this).submit();
         }
+    });
+
+    var signupForm = $('#signup-form');
+    $(signupForm).submit(function (e) {
+        e.preventDefault();
+        var firstName = $('#signup-firstname').val();
+        var lastName = $('#signup-lastname').val();
+        var email = $('#signup-email').val();
+        var month = $('#signup-month').val();
+        var day = $('#signup-day').val();
+        var year = $('#signup-year').val();
+        var password = $('#signup-password').val();
+        var passwordConfirm = $('#signup-password-confirm').val();
+        /*
+        if (!firstName || firstName.trim().length == 0) {
+            $('#signup-firstname').addClass('signup-input-error');
+            $('.signup-error-div').text('You must supply a first name!');
+            $('.signup-error-div').show();
+        } else {
+            $('#signup-firstname').removeClass('signup-input-error');
+            $('.signup-error-div').empty();
+            $('.signup-error-div').show();
+        }
+        if (!lastName || lastName.trim().length == 0) {
+            $('#signup-lastname').addClass('signup-input-error');
+            $('.signup-error-div').text('You must supply a last name!');
+            $('.signup-error-div').show();
+        } else {
+            $('#signup-lastname').removeClass('signup-input-error');
+            $('.signup-error-div').empty();
+            $('.signup-error-div').hide();
+        }
+        if (validated) {
+            console.log('should be submitting');
+            $(this).unbind();
+            $(this).submit();
+        }
+        */
+       $(this).unbind();
+       $(this).submit();
     });
 })(window.jQuery);
