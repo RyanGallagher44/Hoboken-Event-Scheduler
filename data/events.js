@@ -7,7 +7,7 @@ const createEvent = async function createEvent(name, users_registered, creator, 
     //check all the inputs
     name = validation.checkString(name, 'Name');
     //change this to id
-    creator = validation.checkString(creator, 'Creator');
+    creator = validation.checkId(creator, 'Creator');
     date = validation.checkDate(date, 'Date');
     time = validation.checkTime(time, 'Time');
     location = validation.checkString(location, 'Location');

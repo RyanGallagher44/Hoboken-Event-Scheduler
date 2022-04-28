@@ -21,8 +21,11 @@ router.get('/', async (req, res) => {
 
 router.get('/add', async (req, res) => {
     //add creator check?
-
-    res.render('events/add', {title: "Create Event"});
+    if(req.session.userId){
+        res.render('events/add', {title: "Create Event", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+    }else {
+        res.status(400).render('shows/user_not_loggedin', {title: "Not Logged In"})
+    }
 });
 
 router.post('/search',async(req,res) => {
@@ -73,32 +76,38 @@ router.post('/add', async (req, res) => {
     let description = req.body.description;
     let tags = req.body.tags;
     
-    try{
-        name = validation.checkString(name, 'Name');
-        //creator = validation.checkId(creator, 'Creator');
-        date = validation.checkDate(date, 'Date');
-        time = validation.checkTime(time, 'Time');
-        location = validation.checkString(location, 'Location');
-        description = validation.checkString(description, 'Description');
-        tags = validation.checkStringArray([tags], 'Tags', 1);
+    if (req.session.userId){
         try{
-            const newEvent = await events.createEvent(
-                name,
-                [],
-                "temp",
-                date,
-                time,
-                location,
-                description,
-                tags
-              );
-              res.status(200).json(newEvent);
+            name = validation.checkString(name, 'Name');
+            creator = validation.checkId(req.session.userId, 'Creator');
+            date = validation.checkDate(date, 'Date');
+            time = validation.checkTime(time, 'Time');
+            location = validation.checkString(location, 'Location');
+            description = validation.checkString(description, 'Description');
+            tags = validation.formatTags(tags, 'Tags');
+            tags = validation.checkStringArray(tags, 'Tags', 1);
+            
+            try{
+                const newEvent = await events.createEvent(
+                    name,
+                    [],
+                    creator,
+                    date,
+                    time,
+                    location,
+                    description,
+                    tags
+                );
+                res.status(200).json({correct: "nice"});
+            }catch (e) {
+                console.log(e);
+                res.status(400).json({error: e});
+            }
         }catch (e) {
-            console.log(e);
             res.status(400).json({error: e});
         }
-    }catch (e) {
-        res.status(400).json({error: e});
+    }else {
+        res.status(400).render('shows/user_not_loggedin', {title: "Not Logged In"})
     }
 });
 

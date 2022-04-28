@@ -1,26 +1,23 @@
-<form action="/events/add" method="POST">
-    <label for="name">Name: </label>
-    <p></p>
-    <input id="name" type="text" name="name"/>
-    <p></p>
-    <label for="date">Date: </label>
-    <p></p>
-    <input id="date" type="date" name="date"/>
-    <p></p>
-    <label for="time">Time: </label>
-    <p></p>
-    <input id="time" type="time" name="time"/>
-    <p></p>
-    <label for="location">Location: </label>
-    <p></p>
-    <input id="location" type="text" name="location"/>
-    <p></p>
-    <label for="description">Description: </label>
-    <p></p>
-    <input id="description" type="text" name="description"/>
-    <p></p>
-    <label for="tags">Tags: </label>
-    <p></p>
-    <input id="tags" type="text" name="tags"/>
-    <button type="submit" value="check" name="btn">Submit</button>    
-</form>
+<div id="spacer"></div>
+<div class="justify-content-center text-center">
+    <form action="/events/add" method="POST" id="eventadder" class="text-center">
+        <label for="name">Event Name: </label>
+        <input id="name" class="tagsinput" type="text" name="name"/>
+        <p></p>
+        <label for="date">Date: </label>
+        <input id="date" class="tagsinput" type="date" name="date"/>
+        <p></p>
+        <label for="time">Time: </label>
+        <input id="time" class="tagsinput" type="time" name="time"/>
+        <p></p>
+        <label for="location">Location: </label>
+        <input id="location" class="tagsinput" type="text" name="location"/>
+        <p></p>
+        <label for="description">Description: </label>
+        <input id="description" class="tagsinput" type="text" name="description"/>
+        <p></p>
+        <label for="tags">Tags: </label>
+        <input id="tags" type="text" data-role="tagsinput" name="tags" form="eventadder"></select>
+        <button class="btn btn-primary" type="submit" value="check" name="btn">Submit</button>    
+    </form>
+</div>
