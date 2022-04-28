@@ -161,11 +161,58 @@ async function getRegisteredEvents(userId){
     const eventList = await eventCollection.find({}).toArray();
     if (!eventList) throw "Error: Could not get all events";
 
+    const currentDate = new Date();
     for (let i = 0; i < eventList.length; i++){
-        if (eventList[i].users_registered.includes(userId)) {
-            evList.push(eventList[i]);
+        let eventDate = new Date(eventList[i].date);
+        if (eventDate >= currentDate) {
+            if (eventList[i].users_registered.includes(userId)) {
+                evList.push(eventList[i]);
+            }
         }
     }
+    return evList;
+}
+
+async function getPastHostedEvents(userId) {
+    validation.checkId(userId);
+    let user = await get(userId);
+    let evList = [];
+    const eventCollection=await events();
+
+    const eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Error: Could not get all events";
+
+    const currentDate = new Date();
+    for (let i = 0; i < eventList.length; i++){
+        let eventDate = new Date(eventList[i].date);
+        if (eventDate < currentDate) {
+            if (eventList[i].creator == userId) {
+                evList.push(eventList[i]);
+            }
+        }
+    }
+    return evList;
+}
+
+async function getPastAttendedEvents(userId) {
+    validation.checkId(userId);
+    let user = await get(userId);
+    let evList = [];
+    const eventCollection=await events();
+
+    const eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Error: Could not get all events";
+
+    const currentDate = new Date();
+    for (let i = 0; i < eventList.length; i++){
+        let eventDate = new Date(eventList[i].date);
+        if (eventDate < currentDate) {
+            if (eventList[i].users_registered.includes(userId)) {
+                evList.push(eventList[i]);
+            }
+        }
+    }
+    
     return evList;
 }
 
@@ -176,5 +223,7 @@ module.exports = {
     joinEvent,
     remove,
     unjoinEvent,
-    getRegisteredEvents
+    getRegisteredEvents,
+    getPastHostedEvents,
+    getPastAttendedEvents
 }

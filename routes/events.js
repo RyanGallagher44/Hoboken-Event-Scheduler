@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
     if (xss(req.session.userId)) {
         try{
-            let eventList=await allEvents.get_all_events();
+            let eventList=await allEvents.get_all_upcoming_events();
             res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         } catch(e){
             res.status(400).json({e});
