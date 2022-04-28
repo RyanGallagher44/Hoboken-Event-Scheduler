@@ -98,7 +98,9 @@ router.post('/add', async (req, res) => {
                     description,
                     tags
                 );
-                res.status(200).json({correct: "nice"});
+                let allTags = await allEvents.get_all_tags();
+                let eventList=await allEvents.get_all_events();
+                res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
             }catch (e) {
                 console.log(e);
                 res.status(400).json({error: e});
