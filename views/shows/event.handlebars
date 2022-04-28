@@ -32,23 +32,28 @@
         </div>
 
         <div id="join-event-form">
-            {{#if alreadyRegistered}}
-                <p>You are registered for this event!</p>
-                <form action="/events/unjoin" method="post" id="unjoin_event_data">
-                    <label hidden for="eid">event id</label>
-                    <input hidden id="eid" name="event_id" value={{event_id}} />
-                    <label hidden for="uid">event id</label>
-                    <input hidden id="uid" name="user_id" value={{user_id}} />
-                    <button class="btn btn-primary" type="submit">Unregister for Event</button>
-                </form>
+            {{#if eventPassed}}
+                <p>You can no longer register for this event as this event has already happened!</p>
             {{else}}
-                <form action="/events/join" method="post" id="join_event_data">
-                    <label hidden for="eid">event id</label>
-                    <input hidden id="eid" name="event_id" value={{event_id}} />
-                    <label hidden for="uid">event id</label>
-                    <input hidden id="uid" name="user_id" value={{user_id}} />
-                    <button class="btn btn-primary" type="submit">Register for Event</button>
-                </form>
+                {{#if alreadyRegistered}}
+                    <p>You are registered for this event!</p>
+                    <form action="/events/unjoin" method="post" id="unjoin_event_data">
+                        <label hidden for="eid">event id</label>
+                        <input hidden id="eid" name="event_id" value={{event_id}} />
+                        <label hidden for="uid">event id</label>
+                        <input hidden id="uid" name="user_id" value={{user_id}} />
+                        <button class="btn btn-primary" type="submit">Unregister for Event</button>
+                    </form>
+                {{else}}
+                    <p>You cannot register for an event on the day of - you must register by or at 11:59PM on the day BEFORE the event.</p>
+                    <form action="/events/join" method="post" id="join_event_data">
+                        <label hidden for="eid">event id</label>
+                        <input hidden id="eid" name="event_id" value={{event_id}} />
+                        <label hidden for="uid">event id</label>
+                        <input hidden id="uid" name="user_id" value={{user_id}} />
+                        <button class="btn btn-primary" type="submit">Register for Event</button>
+                    </form>
+                {{/if}}
             {{/if}}
         </div>
         
