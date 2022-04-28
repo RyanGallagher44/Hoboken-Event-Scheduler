@@ -1,0 +1,30 @@
+<h1 id="hbe-header-allevents">Hoboken Event Scheduler</h1>
+<br>
+<div id="regEvents">
+    <section>
+    <h2 id="allevents-header">{{name}}'s Registered Events</h2>
+    <div>
+        {{#each events}}
+            <div class="card bg-light text-dark text-center all-events-div">
+                <div class="card-body">
+                    <h3 class="card-title">{{name}}</h3>
+                    <p class="card-text">{{description}}</p>
+                    <a class="btn btn-primary" href="/events/{{_id}}">See Event</a>
+                </div>
+
+                <div class="class-footer">
+                    {{#each tags}}
+                        <span class="badge badge-pill badge-secondary">{{{this}}}</span>
+                    {{/each}}
+                </div>
+            </div>
+            {{!-- <li><a id="event" href="/events/{{_id}}">{{name}} 
+            {{#each tags}}
+                <span class="bade badge-pill badge-info">{{{this}}}</span>
+            {{/each}}
+            </a>
+            </li> --}}
+        {{/each}}
+    </div>
+</section>
+</div>

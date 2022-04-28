@@ -1,12 +1,75 @@
+function isLeapYear(year) {
+    if (year % 400 == 0) return true;
+    if (year % 100 == 0) return false;
+    if (year % 4 == 0) return true;
+
+    return false;
+}
+
 (function ($) {
-    /*
-    populates age select on signup form with values 1-100
-    */
-    var signupAge = '';
-    for (let i = 18; i <= 100; i++) {
-        signupAge += `<option val=${i}>${i}</option>`;
+    var signupMonth = '';
+    var months = ['Select', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+    for (let i = 0; i < months.length; i++) {
+        signupMonth += `<option val="${months[i]}">${months[i]}</option>`;
     }
-    $('#signup-age').html(signupAge);
+    $('#signup-month').html(signupMonth);
+
+    var signupYear = '<option val="Select">Select</option>';
+    for (let i = 1900; i <= 2022; i++) {
+        signupYear += `<option val="${i}">${i}</option>`;
+    }
+    $('#signup-year').html(signupYear);
+
+    $('#signup-day').html('<option val="Select">Select</option>')
+
+    var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    $('#signup-month').on('change', function () {
+        var selectedMonth = months.indexOf($('#signup-month').val())-1;
+        if ($('#signup-year').val() != 'Select') {
+            if (selectedMonth == 1) {
+                var ly = isLeapYear($('#signup-year').val());
+                if (ly) {
+                    daysInMonth[1] = 29;
+                }
+            }
+        }
+        var selectedDay = $('#signup-day').val();
+        if (selectedDay > daysInMonth[selectedMonth]) {
+            selectedDay = daysInMonth[selectedMonth];
+        }
+        $('#signup-day').empty();
+        var signupDay = '<option val="Select">Select</option>';
+        for (let i = 1; i <= daysInMonth[selectedMonth]; i++) {
+            signupDay += `<option val="${i}">${i}</option>`;
+        }
+        $('#signup-day').html(signupDay);
+        $('#signup-day').val(selectedDay);
+        daysInMonth[1] = 28;
+    });
+
+    $('#signup-year').on('change', function () {
+        var selectedMonth = months.indexOf($('#signup-month').val())-1;
+        if ($('#signup-year').val() != 'Select') {
+            if (selectedMonth == 1) {
+                var ly = isLeapYear($('#signup-year').val());
+                if (ly) {
+                    daysInMonth[1] = 29;
+                }
+            }
+        }
+        var selectedDay = $('#signup-day').val();
+        if (selectedDay > daysInMonth[selectedMonth]) {
+            selectedDay = daysInMonth[selectedMonth];
+        }
+        $('#signup-day').empty();
+        var signupDay = '<option val="Select">Select</option>';
+        for (let i = 1; i <= daysInMonth[selectedMonth]; i++) {
+            signupDay += `<option val="${i}">${i}</option>`;
+        }
+        $('#signup-day').html(signupDay);
+        $('#signup-day').val(selectedDay);
+        daysInMonth[1] = 28;
+    });
 
     $('.login-error-div').hide();
     $('#delete-act-div').hide();

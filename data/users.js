@@ -7,16 +7,19 @@ const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 const validator = require('../validator');
 const eventData = require('../data/events');
+const ageCalculator = require('calculate-age').default;
 
-async function create(firstName, lastName, email, age, password, passwordConfirm) {
+async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password, passwordConfirm) {
     const userCollection = await users();
 
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');
     email = validator.checkEmail(email);
-    // validate age?
     password = validator.checkPassword(password);
     passwordConfirm = validator.checkConfirmPassword(passwordConfirm);
+
+    const date = new Date();
+    const age = new ageCalculator(`${dob_y}-${dob_m}-${dob_d}`, `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`).getObject();
 
     if (password !== passwordConfirm) throw "Passwords do not match!";
 
@@ -29,7 +32,7 @@ async function create(firstName, lastName, email, age, password, passwordConfirm
         firstName: firstName,
         lastName: lastName,
         email: email,
-        age: age,
+        age: age.years,
         regEvents: [],
         interests: [],
         hashedPassword: hashedPassword
@@ -148,11 +151,30 @@ async function remove(id) {
     return {userDeleted: true, id: id};
 }
 
+async function getRegisteredEvents(userId){
+    //gets the list of eventids from user and returns a list of full event objects
+    validation.checkId(userId);
+    let user = await get(userId);
+    let evList = [];
+    const eventCollection=await events();
+
+    const eventList = await eventCollection.find({}).toArray();
+    if (!eventList) throw "Error: Could not get all events";
+
+    for (let i = 0; i < eventList.length; i++){
+        if (eventList[i].users_registered.includes(userId)) {
+            evList.push(eventList[i]);
+        }
+    }
+    return evList;
+}
+
 module.exports = {
     create,
     check,
     get,
     joinEvent,
     remove,
-    unjoinEvent
+    unjoinEvent,
+    getRegisteredEvents
 }

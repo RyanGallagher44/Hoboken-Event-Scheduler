@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        let createUserRes = await userData.create(req.body.signup_firstname, req.body.signup_lastname, req.body.signup_email, req.body.signup_age, req.body.signup_password, req.body.signup_passwordconfirm);
+        let createUserRes = await userData.create(req.body.signup_firstname, req.body.signup_lastname, req.body.signup_email, req.body.signup_month, req.body.signup_day, req.body.signup_year, req.body.signup_password, req.body.signup_passwordconfirm);
         if (createUserRes.userCreated === true) {
             res.redirect('/');
         }
