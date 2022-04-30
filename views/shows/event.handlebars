@@ -46,7 +46,7 @@
                     </form>
                 {{else}}
                     <p>You cannot register for an event on the day of - you must register by or at 11:59PM on the day BEFORE the event.</p>
-                    <form action="/events/join" method="post" id="join_event_data">
+                    <form id="join_event_data">
                         <label hidden for="eid">event id</label>
                         <input hidden id="eid" name="event_id" value={{event_id}} />
                         <label hidden for="uid">event id</label>

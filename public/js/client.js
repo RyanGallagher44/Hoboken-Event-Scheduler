@@ -197,4 +197,32 @@ function isLeapYear(year) {
        $(this).unbind();
        $(this).submit();
     });
+
+    //AJAX post to join event
+    var joinEvent = $('#join_event_data');
+    var eid = $('#eid').val();
+    var uid = $('#uid').val();
+
+    joinEvent.submit(function (event) {
+        event.preventDefault();
+        if (!eid || !uid) {
+            document.location.href = '/events'; //Redirect if error (this would only happen if someone screwed with the HTML, as these values are hidden)
+        }
+        if (eid.length == 0 || eid.trim().length == 0 || uid.length == 0 || uid.trim().length == 0) { //same as above
+            document.location.href = '/events';
+        }
+        
+        var requestConfig = {
+            method: 'POST',
+            url: '/events/join',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                event_id: eid,
+                user_id: uid
+            })
+        };
+        $.ajax(requestConfig).then(function (responseMessage) {
+            location.reload();
+        })
+    });
 })(window.jQuery);
