@@ -113,7 +113,7 @@ router.post('/add', async (req, res) => {
 router.get('/:id', async (req, res) => {
     let id = undefined;
     try {
-        id = validation.checkId(req.params.id, 'Event ID'); //make sure valid ID
+        id = validation.checkId(xss(req.params.id), 'Event ID'); //make sure valid ID
         //console.log(id)
         //Next, get the event
         let event = await events.get(id);
@@ -152,8 +152,8 @@ router.post('/join', async (req, res) => {
     let event_id = undefined;
     let user_id = undefined
     try {
-        event_id = validation.checkId(req.body.event_id, 'Event ID');
-        user_id = validation.checkId(req.body.user_id, 'User ID');
+        event_id = validation.checkId(xss(req.body.event_id), 'Event ID');
+        user_id = validation.checkId(xss(req.body.user_id), 'User ID');
     } catch (error) { //this shouldnt happen
         res.status(400).json({error});
         return;
@@ -176,8 +176,8 @@ router.post('/unjoin', async (req, res) => {
     let event_id = undefined;
     let user_id = undefined
     try {
-        event_id = validation.checkId(req.body.event_id, 'Event ID');
-        user_id = validation.checkId(req.body.user_id, 'User ID');
+        event_id = validation.checkId(xss(req.body.event_id), 'Event ID');
+        user_id = validation.checkId(xss(req.body.user_id), 'User ID');
     } catch (error) { //this shouldnt happen
         res.status(400).json({error});
         return;
