@@ -24,6 +24,16 @@ module.exports = {
         return strVal;
     },
 
+    formatTags(tags, varName){
+      if(!tags) throw `Error: Must supply ${varName}`;
+      if (tags.length == 1) throw `Error: Must supply ${varName}`;
+      tags = tags[1];
+      tags = this.checkString(tags, varName);
+      tags = tags.trim().split(",");
+      if (!Array.isArray(tags)) tags = [tags];
+      return tags;
+    },
+
     checkStringArray(arr, varName, len) {
         let arrayInvalidFlag = false;
         if (!arr || !Array.isArray(arr))
@@ -45,9 +55,8 @@ module.exports = {
         date = this.checkString(date, varName);
         if (!moment(date).isValid()) throw `Must ${varName} be a valid date string`;
         let temp = new Date(date);
-        if (temp.getFullYear() < '1900' || temp.getFullYear() > '2025') {
-            throw `${varName} must be a date between 1900 and 2025.`;
-        }
+        let current = new Date();
+        if (temp.getTime() + 90000000 < current.toLocaleTimeString()) throw `${varName} must be a time in the future`
         return date;
     },
 

@@ -412,3 +412,11 @@ nav.a:visited {
   .today {
     background-color: #167e56;
   }
+
+  #eventadder{
+      background-color: #f8f9fa;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      height: 550px;
+      width: 400px;
+  }
