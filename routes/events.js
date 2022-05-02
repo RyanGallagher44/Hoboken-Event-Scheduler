@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
     if (xss(req.session.userId)) {
         try{
-            let eventList=await allEvents.get_all_events();
+            let eventList=await allEvents.get_all_upcoming_events();
             res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         } catch(e){
             res.status(400).json({e});
@@ -124,7 +124,7 @@ router.post('/add', async (req, res) => {
 router.get('/:id', async (req, res) => {
     let id = undefined;
     try {
-        id = validation.checkId(req.params.id, 'Event ID'); //make sure valid ID
+        id = validation.checkId(xss(req.params.id), 'Event ID'); //make sure valid ID
         //console.log(id)
         //Next, get the event
         let event = await events.get(id);
@@ -141,11 +141,17 @@ router.get('/:id', async (req, res) => {
         let eventCreator = await userData.get(event.creator.toString());
         let event_creator_name = `${eventCreator.firstName} ${eventCreator.lastName}`;
 
-        if (event.users_registered.includes(req.session.userId)) {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length});
+        const currentDate = new Date();
+        const eventDate = new Date(event.date);
+        if (eventDate < currentDate) {
+            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, eventPassed: true, numAttending: event.users_registered.length});
         } else {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length});
-        }        
+            if (event.users_registered.includes(req.session.userId)) {
+                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length});
+            } else {
+                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length});
+            }
+        }   
     } catch (error) {
         console.log(error);
         res.status(400).json({error});
@@ -157,8 +163,8 @@ router.post('/join', async (req, res) => {
     let event_id = undefined;
     let user_id = undefined
     try {
-        event_id = validation.checkId(req.body.event_id, 'Event ID');
-        user_id = validation.checkId(req.body.user_id, 'User ID');
+        event_id = validation.checkId(xss(req.body.event_id), 'Event ID');
+        user_id = validation.checkId(xss(req.body.user_id), 'User ID');
     } catch (error) { //this shouldnt happen
         res.status(400).json({error});
         return;
@@ -181,8 +187,8 @@ router.post('/unjoin', async (req, res) => {
     let event_id = undefined;
     let user_id = undefined
     try {
-        event_id = validation.checkId(req.body.event_id, 'Event ID');
-        user_id = validation.checkId(req.body.user_id, 'User ID');
+        event_id = validation.checkId(xss(req.body.event_id), 'Event ID');
+        user_id = validation.checkId(xss(req.body.user_id), 'User ID');
     } catch (error) { //this shouldnt happen
         res.status(400).json({error});
         return;

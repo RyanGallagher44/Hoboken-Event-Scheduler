@@ -125,6 +125,16 @@ form {
     text-align: center;
 }
 
+.signup-input-error {
+    border: 1px solid red;
+    border-radius: 2px;
+}
+
+.signup-error-div {
+    color: red;
+    margin-top: 30px;
+}
+
 #signup-link {
     margin-top: 30px;
     text-align: center;
@@ -276,9 +286,12 @@ nav.a:visited {
     list-style-type: none;
     margin: 10px;
     border: solid;
+    border-width: 1px;
+    border-color: black;
     padding: 5px;
     border-radius: 10px;
-    background-color: #ADD8E6;
+    background-color: #6C757D;
+    color: white;
 }
 
 .flex-container {
