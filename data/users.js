@@ -216,6 +216,36 @@ async function getPastAttendedEvents(userId) {
     return evList;
 }
 
+async function getRecommendedEvents(userId) { //Returns list of event objects that are recommended for the user (based on tags of events attended in the past)
+    userId = validation.checkId(userId);
+    let user = await get(userId);
+    let pastAttendedEvents = await getPastAttendedEvents(userId); //List of events attened in the past
+    let pastTags = []; //Array that will hold the tags of events attended in the past
+    let evList = []; //Array that holds the recommended events
+    for (let x of pastAttendedEvents) {
+        pastTags.push.apply(pastTags, x.tags)
+    }
+    const eventCollection = await events();
+
+    const eventList = await eventCollection.find({}).toArray(); //Array of all events
+    if (!eventList) throw "Error: Could not get all events";
+
+    const currentDate = new Date();
+    for (let i = 0; i < eventList.length; i++){
+        let eventDate = new Date(eventList[i].date);
+        if (eventDate > currentDate) { //If the event is in the future
+            let eventTags = eventList[i].tags;
+            for (let x of eventTags) {
+                if (pastTags.includes(x)) {
+                    evList.push(eventList[i]);
+                    break;
+                }
+            }
+        }
+    }
+    return evList;
+}
+
 module.exports = {
     create,
     check,
@@ -225,5 +255,6 @@ module.exports = {
     unjoinEvent,
     getRegisteredEvents,
     getPastHostedEvents,
-    getPastAttendedEvents
+    getPastAttendedEvents,
+    getRecommendedEvents
 }
