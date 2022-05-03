@@ -9,6 +9,7 @@ const xss=require('xss');
 
 router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
+    req.session.prevURL = '/events';
     if (xss(req.session.userId)) {
         try{
             let eventList=await allEvents.get_all_upcoming_events();
@@ -144,12 +145,30 @@ router.get('/:id', async (req, res) => {
         const currentDate = new Date();
         const eventDate = new Date(event.date);
         if (eventDate < currentDate) {
-            res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, eventPassed: true, numAttending: event.users_registered.length});
+            if (req.session.prevURL == '/user') {
+                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, eventPassed: true, numAttending: event.users_registered.length});
+            } else if (req.session.prevURL == '/user/regEvents') {
+                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, eventPassed: true, numAttending: event.users_registered.length, myReg: true});
+            } else {
+                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, eventPassed: true, numAttending: event.users_registered.length, home: true});
+            }
         } else {
             if (event.users_registered.includes(req.session.userId)) {
-                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length});
+                if (req.session.prevURL == '/user') {
+                    res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length});
+                } else if (req.session.prevURL == '/user/regEvents') {
+                    res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length, myReg: true});
+                } else {
+                    res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, alreadyRegistered: true, numAttending: event.users_registered.length, home: true});
+                }
             } else {
-                res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length});
+                if (req.session.prevURL == '/user') {
+                    res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length});
+                } else if (req.session.prevURL == '/user/regEvents') {
+                    res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length, myReg: true});
+                } else {
+                    res.render('shows/event', {title: event.name, user_id: req.session.userId, event_name: event.name, event_id: event._id.toString(), event_creator: event_creator_name, event_date: event.date, event_time: event.time, event_location: event.location, event_description: event.description, event_tags: event.tags, event_comments: comments_list, numAttending: event.users_registered.length, home: true});
+                }
             }
         }   
     } catch (error) {
