@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 16;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
-const validator = require('../validator');
 const eventData = require('../data/events');
 const ageCalculator = require('calculate-age').default;
 
@@ -14,9 +13,10 @@ async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password,
 
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');
-    email = validator.checkEmail(email);
-    password = validator.checkPassword(password);
-    passwordConfirm = validator.checkConfirmPassword(passwordConfirm);
+    email = validation.checkEmail(email);
+    // validate month, day, and year somehow
+    password = validation.checkPassword(password);
+    passwordConfirm = validation.checkConfirmPassword(passwordConfirm);
 
     const date = new Date();
     const age = new ageCalculator(`${dob_y}-${dob_m}-${dob_d}`, `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`).getObject();
@@ -47,6 +47,9 @@ async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password,
 }
 
 async function check(email, password) {
+    email = validation.checkEmail(email);
+    password = validation.checkPassword(password);
+
     const userCollection = await users();
 
     const user = await userCollection.findOne({email: email});
@@ -70,6 +73,8 @@ async function check(email, password) {
 }
 
 async function get(id) { //validate
+    id = validation.checkId(id, "User ID");
+
     const userCollection = await users();
 
     const user = await userCollection.findOne({ _id: ObjectId(id) });
@@ -112,6 +117,8 @@ async function unjoinEvent(eventId, userId) {
 }
 
 async function remove(id) {
+    id = validation.checkId(id, "User ID");
+
     const userCollection = await users();
     const eventCollection = await events();
 
@@ -153,7 +160,7 @@ async function remove(id) {
 
 async function getRegisteredEvents(userId){
     //gets the list of eventids from user and returns a list of full event objects
-    validation.checkId(userId);
+    validation.checkId(userId, "User ID");
     let user = await get(userId);
     let evList = [];
     const eventCollection=await events();
@@ -174,8 +181,7 @@ async function getRegisteredEvents(userId){
 }
 
 async function getPastHostedEvents(userId) {
-    validation.checkId(userId);
-    let user = await get(userId);
+    userId = validation.checkId(userId, "User ID");
     let evList = [];
     const eventCollection=await events();
 
@@ -195,8 +201,7 @@ async function getPastHostedEvents(userId) {
 }
 
 async function getPastAttendedEvents(userId) {
-    validation.checkId(userId);
-    let user = await get(userId);
+    userId = validation.checkId(userId, "User ID");
     let evList = [];
     const eventCollection=await events();
 
@@ -217,7 +222,7 @@ async function getPastAttendedEvents(userId) {
 }
 
 async function getRecommendedEvents(userId) { //Returns list of event objects that are recommended for the user (based on tags of events attended in the past)
-    userId = validation.checkId(userId);
+    userId = validation.checkId(userId, "User ID");
     let user = await get(userId);
     let pastAttendedEvents = await getPastAttendedEvents(userId); //List of events attened in the past
     let pastTags = []; //Array that will hold the tags of events attended in the past
