@@ -1,7 +1,15 @@
 <h1 id="event-page-header">{{event_name}}</h1>
 
 <div id="top-of-event-page">
-    <a class="btn btn-light" href="/">Back to Home</a>
+    {{#if home}}
+        <a class="btn btn-light" href="/">Back to Home</a>
+    {{else}}
+        {{#if myReg}}
+            <a class="btn btn-light" href="/user/regEvents">Back to My Registered Events</a>
+        {{else}}
+            <a class="btn btn-light" href="/user">Back to User Profile</a>
+        {{/if}}
+    {{/if}}
     <br>
 </div>
 
