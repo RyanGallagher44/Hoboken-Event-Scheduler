@@ -103,7 +103,7 @@ router.post('/add', async (req, res) => {
                     tags
                 );
                 let allTags = await allEvents.get_all_tags();
-                let eventList=await allEvents.get_all_events();
+                let eventList=await allEvents.get_all_upcoming_events();
                 res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
             }catch (e) {
                 console.log(e);
