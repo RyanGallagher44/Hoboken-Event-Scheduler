@@ -65,8 +65,8 @@
       var element_dates = $('#calendar_data_dates').data('config');
       let dates = element_dates.substring(element_dates.indexOf(":")+1, element_dates.length-1).split(",");
       
-      console.log(names);
-      console.log(dates);
+      //console.log(names);
+      //console.log(dates);
 
       all_events = [];
       for (let i = 0; i < dates.length; i++) {
@@ -76,7 +76,7 @@
           };
           all_events.push(temp);
       }
-      console.log(all_events)
+      //console.log(all_events)
     
       for (let i = 1; i <= lastDay; i++) { //days of the current month
         if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) { //If it is the current day
@@ -89,10 +89,10 @@
         for (let j = 0; j < all_events.length; j++) { //Loop over each events
             console.log(j)
             curr_event = all_events[j];
-            let event_month = Number(curr_event.date.split('/')[0]);
-            let event_day = Number(curr_event.date.split('/')[1]);
-            if (Number(date.getMonth())+1 === event_month && event_day === i){ //If the date of the event is the date we are at in the calendar right now
-            //if(all_events[j] === i) {
+            let event_year = Number(curr_event.date.split('-')[0]);
+            let event_month = Number(curr_event.date.split('-')[1]);
+            let event_day = Number(curr_event.date.split('-')[2]);
+            if (Number(date.getFullYear()) === event_year && Number(date.getMonth())+1 === event_month && event_day === i){ //If the date of the event is the date we are at in the calendar right now
                 days += curr_event.name;
             }
         }
