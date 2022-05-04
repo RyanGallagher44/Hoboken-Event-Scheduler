@@ -30,7 +30,8 @@
 
     <div id="pastEventsHosted">
     <section>
-    <h2 id="allevents-header">Past Events - Hosted</h2>
+    <h2 id="allevents-header">Past Events</h2>
+    <h3>Host</h3>
     <div>
         {{#each events_hosted}}
             <div class="card bg-light text-dark text-center all-events-div">
@@ -46,12 +47,6 @@
                     {{/each}}
                 </div>
             </div>
-            {{!-- <li><a id="event" href="/events/{{_id}}">{{name}} 
-            {{#each tags}}
-                <span class="bade badge-pill badge-info">{{{this}}}</span>
-            {{/each}}
-            </a>
-            </li> --}}
         {{/each}}
     </div>
     </section>
@@ -59,7 +54,8 @@
     <br>
     <div id="pastEventsAttended">
     <section>
-    <h2 id="allevents-header">Past Events - Attended</h2>
+    <h2 id="allevents-header">Past Events</h2>
+    <h3>Attendee</h3>
     <div>
         {{#each events_attended}}
             <div class="card bg-light text-dark text-center all-events-div">
@@ -75,12 +71,6 @@
                     {{/each}}
                 </div>
             </div>
-            {{!-- <li><a id="event" href="/events/{{_id}}">{{name}} 
-            {{#each tags}}
-                <span class="bade badge-pill badge-info">{{{this}}}</span>
-            {{/each}}
-            </a>
-            </li> --}}
         {{/each}}
     </div>
     </section>
