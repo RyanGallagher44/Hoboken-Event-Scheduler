@@ -1,5 +1,6 @@
 const {ObjectId} = require('mongodb');
 const emailValidator = require('email-validator');
+const moment = require('moment');
 
 function checkId(id){
     if(!id) throw "Error: must provide ID";
@@ -55,11 +56,22 @@ function checkConfirmPassword(pwd) {
     return pwd;
 }
 
+function checkDate(date) {
+    date = this.checkString(date, varName);
+    if (!moment(date).isValid()) throw `Must be a valid date string`;
+    let temp = new Date(date);
+    if (temp.getFullYear() < '1900' || temp.getFullYear() > '2025') {
+        throw `Date must be between 1900 and 2025.`;
+    }
+    return date;
+}
+
 module.exports = {
     checkId,
     checkString,
     checkStringArray,
     checkEmail,
     checkPassword,
-    checkConfirmPassword
+    checkConfirmPassword,
+    checkDate
 }

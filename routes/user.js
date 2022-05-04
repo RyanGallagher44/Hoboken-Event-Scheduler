@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
+const validator = require('../validator');
 const userData = data.users;
+const xss=require('xss');
 
 router.get('/', async (req, res) => {
     const pastHosted = await userData.getPastHostedEvents(req.session.userId);
@@ -21,10 +23,18 @@ router.get('/delete', async (req, res) => {
 });
 
 router.get('/regEvents', async (req, res) => {
-    const evList = await userData.getRegisteredEvents(req.session.userId);
-    const user = await userData.get(req.session.userId);
-    req.session.prevURL = '/user/regEvents';
-    res.render("shows/registeredEvents", {title: "My Registered Events", name: `${user.firstName} ${user.lastName}`, events: evList, loggedIn: true, myReg: true});
+    try{
+        let userId = validator.checkId(xss(req.session.userId));
+        var evList = await userData.getRegisteredEvents(userId);
+        const user = await userData.get(userId);
+        req.session.prevURL = '/user/regEvents';
+        var userFirst = validator.checkString(user.firstName);
+        var userLast = validator.checkString(user.lastName);
+    }
+    catch(e){
+        console.log(e);
+    }
+    res.render("shows/registeredEvents", {title: "My Registered Events", name: `${userFirst} ${userLast}`, events: evList, loggedIn: true});
 })
 
 module.exports = router;
