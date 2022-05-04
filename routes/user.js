@@ -22,11 +22,16 @@ router.get('/delete', async (req, res) => {
 });
 
 router.get('/regEvents', async (req, res) => {
-    let userId = validator.checkId(xss(req.session.userId));
-    const evList = await userData.getRegisteredEvents(userId);
-    const user = await userData.get(userId);
-    let userFirst = validator.checkString(user.firstName);
-    let userLast = validator.checkString(user.lastName);
+    try{
+        let userId = validator.checkId(xss(req.session.userId));
+        const evList = await userData.getRegisteredEvents(userId);
+        const user = await userData.get(userId);
+        let userFirst = validator.checkString(user.firstName);
+        let userLast = validator.checkString(user.lastName);
+    }
+    catch(e){
+        console.log(e);
+    }
     res.render("shows/registeredEvents", {title: "My Registered Events", name: `${userFirst} ${userLast}`, events: evList, loggedIn: true});
 })
 
