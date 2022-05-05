@@ -6,14 +6,12 @@ const validation = require('../validation');
 const createEvent = async function createEvent(name, users_registered, creator, date, time, location, description, tags){
     //check all the inputs
     name = validation.checkString(name, 'Name');
-    //change this to id
     creator = validation.checkId(creator, 'Creator');
-    date = validation.checkDate(date, 'Date');
+    date = validation.checkDate(date, time, 'Date');
     time = validation.checkTime(time, 'Time');
     location = validation.checkString(location, 'Location');
     description = validation.checkString(description, 'Description');
     tags = validation.checkStringArray(tags, 'Tags', 1);
-    //check creator ID here for valid user
 
     const eventCollection = await events();
 
