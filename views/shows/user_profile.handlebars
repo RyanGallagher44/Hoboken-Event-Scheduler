@@ -4,6 +4,10 @@
     <h3>{{{email}}}</h3>
     <hr>
 
+    {{#if otherUser}}
+        <button class="btn btn-primary">Follow</button>
+    {{/if}}
+
     {{#if recommended_events}}
         <div id="recommendedEvents">
         <section>
