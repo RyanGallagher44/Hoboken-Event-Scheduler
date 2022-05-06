@@ -20,8 +20,6 @@ module.exports = {
         strVal = strVal.trim();
         if (strVal.length === 0)
         throw `Error: ${varName} cannot be an empty string or string with just spaces.`;
-        if (!isNaN(strVal))
-        throw `Error: ${strVal} is not a valid value for ${varName} as it only contains digits.`;
         return strVal;
     },
 
@@ -57,10 +55,10 @@ module.exports = {
 
     checkDate(date, time, varName) {
         date = this.checkString(date, varName);
-        if (!moment(date).isValid()) throw `Must ${varName} be a valid date string`;
+        if (!moment(date).isValid()) throw `Error: Must ${varName} be a valid date string`;
         let temp = new Date(date + ' ' + time);
         let current = new Date();
-        if (temp.getTime() < current.getTime()) throw `${varName} must be a time in the future`
+        if (temp.getTime() < current.getTime()) throw `Error: ${varName} must be a time in the future`
         return date;
     },
 
