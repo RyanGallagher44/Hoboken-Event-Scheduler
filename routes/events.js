@@ -84,7 +84,7 @@ router.post('/add', async (req, res) => {
     if (xss(req.session.userId)){
         try{
             name = validation.checkString(name, 'Name');
-            creator = validation.checkId(req.session.userId, 'Creator');
+            creator = validation.checkId(xss(req.session.userId), 'Creator');
             time = validation.checkTime(time, 'Time');
             date = validation.checkDate(date, time, 'Date');
             location = validation.checkString(location, 'Location');

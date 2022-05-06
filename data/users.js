@@ -190,8 +190,8 @@ async function getPastHostedEvents(userId) {
 
     const currentDate = new Date();
     for (let i = 0; i < eventList.length; i++){
-        let eventDate = new Date(eventList[i].date);
-        if (eventDate < currentDate) {
+        let eventDate = new Date(eventList[i].date + ' ' + eventList[i].time);
+        if (eventDate.getTime() < currentDate.getTime()) {
             if (eventList[i].creator == userId) {
                 evList.push(eventList[i]);
             }
@@ -210,8 +210,9 @@ async function getPastAttendedEvents(userId) {
 
     const currentDate = new Date();
     for (let i = 0; i < eventList.length; i++){
-        let eventDate = new Date(eventList[i].date);
-        if (eventDate < currentDate) {
+        let eventDate = new Date(eventList[i].date + ' ' + eventList[i].time);
+        console.log("event time: " + eventList[i].name + " - " + eventDate);
+        if (eventDate.getTime() < currentDate.getTime()) {
             if (eventList[i].users_registered.includes(userId)) {
                 evList.push(eventList[i]);
             }

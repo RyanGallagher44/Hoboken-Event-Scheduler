@@ -28,12 +28,15 @@ module.exports = {
     formatTags(tags, varName){
       if(!tags) throw `Error: Must supply ${varName}`;
       if (tags.length == 1) throw `Error: Must supply ${varName}`;
-      tags = tags[1];
-      tags = this.checkString(tags, varName);
       console.log('preformatted tags: ' + tags);
-      tags = tags.trim().split(/(\s*,\s*)/g);
+      tags = tags.slice(1);
+      tags = this.checkString(tags, varName);
+      tags = tags.trim();
+      splitReg = /^(\s*,\s*)$/g;
+      tags = tags.split(splitReg);
       if (!Array.isArray(tags)) tags = [tags];
       console.log('formatted tags: '+tags);
+      console.log('type: '+typeof(tags));
       return tags;
     },
 
@@ -48,6 +51,7 @@ module.exports = {
             break;
           }
           arr[i] = arr[i].trim().toLocaleLowerCase();
+          arr[i] = this.checkString(arr[i], 'tag');
         }
         if (arrayInvalidFlag)
           throw `One or more elements in ${varName} array is not a string or is an empty string`;
@@ -59,8 +63,6 @@ module.exports = {
         if (!moment(date).isValid()) throw `Must ${varName} be a valid date string`;
         let temp = new Date(date + ' ' + time);
         let current = new Date();
-        console.log('temp:' + temp);
-        console.log('current: ' + current);
         if (temp.getTime() < current.getTime()) throw `${varName} must be a time in the future`
         return date;
     },
