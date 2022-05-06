@@ -417,6 +417,16 @@ nav.a:visited {
       background-color: #f8f9fa;
       padding-top: 10px;
       padding-bottom: 10px;
-      height: 550px;
+      height: 100%;
       width: 400px;
+      overflow: auto;
+  }
+
+  #tags{
+      height: 100%;
+  }
+
+  #add-err {
+      color:rgb(200, 0, 0);
+      text-align: center;
   }

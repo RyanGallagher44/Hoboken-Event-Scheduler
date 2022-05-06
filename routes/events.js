@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 
 router.get('/add', async (req, res) => {
     //add creator check?
-    if(req.session.userId){
+    if(xss(req.session.userId)){
         res.render('events/add', {title: "Create Event", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
     }else {
         res.status(400).render('shows/user_not_loggedin', {title: "Not Logged In"})
@@ -45,7 +45,7 @@ router.post('/search',async(req,res) => {
         
     }catch(e){
         res.status(400);
-        res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
+        res.render('shows/all_events', {title: "All Events", error:e, hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
         
     }
 });
@@ -106,10 +106,10 @@ router.post('/add', async (req, res) => {
                 res.redirect('/events');
             }catch (e) {
                 console.log(e);
-                res.status(400).json({error: e});
+                res.status(400).render('events/add', {title: "Create Event", error: e, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
             }
         }catch (e) {
-            res.status(400).json({error: e});
+            res.status(400).render('events/add', {title: "Create Event", error: e, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
         }
     }else {
         res.status(400).render('shows/user_not_loggedin', {title: "Not Logged In"})
