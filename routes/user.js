@@ -38,12 +38,15 @@ router.get('/regEvents', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    if (req.params.id == req.session.userId) {
+        res.redirect('/');
+    }
     try {
         const pastHosted = await userData.getPastHostedEvents(req.params.id);
         const pastAttended = await userData.getPastAttendedEvents(req.params.id);
         req.session.prevURL = '/user/other';
         req.session.prevVisitedProfile = req.params.id;
-        res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.params.id)).firstName} ${(await userData.get(req.params.id)).lastName}`, age: `${(await userData.get(req.params.id)).age}`, email: `${(await userData.get(req.params.id)).email}`, events_hosted: pastHosted, events_attended: pastAttended})
+        res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.params.id)).firstName} ${(await userData.get(req.params.id)).lastName}`, age: `${(await userData.get(req.params.id)).age}`, email: `${(await userData.get(req.params.id)).email}`, events_hosted: pastHosted, events_attended: pastAttended, otherUser: true})
     } catch (e) {
         console.log(e);
     }
