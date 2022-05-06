@@ -1,36 +1,38 @@
 <div id="user-profile-div">
-    <h1>{{{name}}}</h1>
+    <h1>{{{profile_name}}}</h1>
     <h2>{{{age}}}</h2>
     <h3>{{{email}}}</h3>
     <hr>
 
-    <div id="recommendedEvents">
-    <section>
-        <h2>Recommended Events</h2>
-        <div>
-            {{#each recommended_events}}
-            <div class="card bg-light text-dark text-center all-events-div">
-                <div class="card-body">
-                    <h3 class="card-title">{{name}}</h3>
-                    <p class="card-text">{{description}}</p>
-                    <a class="btn btn-primary" href="/events/{{_id}}">See Event</a>
-                </div>
+    {{#if recommended_events}}
+        <div id="recommendedEvents">
+        <section>
+            <h2>Recommended Events</h2>
+            <div>
+                {{#each recommended_events}}
+                <div class="card bg-light text-dark text-center all-events-div">
+                    <div class="card-body">
+                        <h3 class="card-title">{{name}}</h3>
+                        <p class="card-text">{{description}}</p>
+                        <a class="btn btn-primary" href="/events/{{_id}}">See Event</a>
+                    </div>
 
-                <div class="class-footer">
-                    {{#each tags}}
-                        <span class="badge badge-pill badge-secondary">{{{this}}}</span>
-                    {{/each}}
+                    <div class="class-footer">
+                        {{#each tags}}
+                            <span class="badge badge-pill badge-secondary">{{{this}}}</span>
+                        {{/each}}
+                    </div>
                 </div>
+            {{/each}}
             </div>
-        {{/each}}
+        </section>
         </div>
-    </section>
-    </div>
-    <br>
+        <br>
+    {{/if}}
 
     <div id="pastEventsHosted">
     <section>
-    <h2 id="allevents-header">Past Events</h2>
+    <h2 id="allevents-header">Events</h2>
     <h3>Host</h3>
     <div>
         {{#each events_hosted}}
@@ -75,16 +77,18 @@
     </div>
     </section>
     </div>
-    <button class="btn btn-danger" id="delete-act-btn">Delete Account</button>
-    <div id="delete-act-div">
-        <p>
-            Are you sure you want to do this? You will be automatically signed out
-            and will be required to create a new account to continue using
-            Hoboken Event Scheduler.
-        </p>
-        <button class="btn btn-light" id="cancel-delete-act-btn">Cancel</button>
-        <form id="delete-act-form" method="POST" action="/user">
-            <button class="btn btn-danger" id="confirm-delete-act-btn" type="submit">DELETE</button>
-        </form>
-    </div>
+    {{#if deletionAllowed}}
+        <button class="btn btn-danger" id="delete-act-btn">Delete Account</button>
+        <div id="delete-act-div">
+            <p>
+                Are you sure you want to do this? You will be automatically signed out
+                and will be required to create a new account to continue using
+                Hoboken Event Scheduler.
+            </p>
+            <button class="btn btn-light" id="cancel-delete-act-btn">Cancel</button>
+            <form id="delete-act-form" method="POST" action="/user">
+                <button class="btn btn-danger" id="confirm-delete-act-btn" type="submit">DELETE</button>
+            </form>
+        </div>
+    {{/if}}
 </div>
