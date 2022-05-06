@@ -13,17 +13,17 @@ function isLeapYear(year) {
     var signupMonth = '';
     var months = ['Select', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     for (let i = 0; i < months.length; i++) {
-        signupMonth += `<option val="${months[i]}">${months[i]}</option>`;
+        signupMonth += `<option value="${months[i]}">${months[i]}</option>`;
     }
     $('#signup-month').html(signupMonth);
 
-    var signupYear = '<option val="Select">Select</option>';
+    var signupYear = '<option value="Select">Select</option>';
     for (let i = 1900; i <= 2022; i++) {
-        signupYear += `<option val="${i}">${i}</option>`;
+        signupYear += `<option value="${i}">${i}</option>`;
     }
     $('#signup-year').html(signupYear);
 
-    $('#signup-day').html('<option val="Select">Select</option>')
+    $('#signup-day').html('<option value="Select">Select</option>')
 
     var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     $('#signup-month').on('change', function () {
@@ -41,9 +41,9 @@ function isLeapYear(year) {
             selectedDay = daysInMonth[selectedMonth];
         }
         $('#signup-day').empty();
-        var signupDay = '<option val="Select">Select</option>';
+        var signupDay = '<option value="Select">Select</option>';
         for (let i = 1; i <= daysInMonth[selectedMonth]; i++) {
-            signupDay += `<option val="${i}">${i}</option>`;
+            signupDay += `<option value="${i}">${i}</option>`;
         }
         $('#signup-day').html(signupDay);
         $('#signup-day').val(selectedDay);
@@ -65,9 +65,9 @@ function isLeapYear(year) {
             selectedDay = daysInMonth[selectedMonth];
         }
         $('#signup-day').empty();
-        var signupDay = '<option val="Select">Select</option>';
+        var signupDay = '<option value="Select">Select</option>';
         for (let i = 1; i <= daysInMonth[selectedMonth]; i++) {
-            signupDay += `<option val="${i}">${i}</option>`;
+            signupDay += `<option value="${i}">${i}</option>`;
         }
         $('#signup-day').html(signupDay);
         $('#signup-day').val(selectedDay);
