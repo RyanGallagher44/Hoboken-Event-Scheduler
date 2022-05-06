@@ -31,11 +31,9 @@ module.exports = {
       tags = tags.substr(1);
       tags = this.checkString(tags, varName);
       tags = tags.trim();
-      splitReg = /^(\s*,\s*)$/g;
+      splitReg = /\s*,\s*/;
       tags = tags.split(splitReg);
       if (!Array.isArray(tags)) tags = [tags];
-      console.log('formatted tags: '+tags);
-      console.log('type: '+typeof(tags));
       return tags;
     },
 

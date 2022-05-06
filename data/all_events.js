@@ -45,8 +45,8 @@ async function get_all_tags() {
     const currentDate = new Date();
     let tags = [];
     eventList.forEach((event) => {
-        let eventDate = new Date(event.date);
-        if (eventDate >= currentDate) {
+        let eventDate = new Date(event.date + ' ' + event.time);
+        if (eventDate.getTime() >= currentDate.getTime()) {
             (event.tags).forEach((tag) => {
                 if (!tags.includes(tag)) {
                     tags.push(tag);
