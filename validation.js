@@ -28,7 +28,7 @@ module.exports = {
     formatTags(tags, varName){
       if(!tags) throw `Error: Must supply ${varName}`;
       if (tags.length == 1) throw `Error: Must supply ${varName}`;
-      tags = tags[1];
+      tags = tags.substr(1);
       tags = this.checkString(tags, varName);
       tags = tags.trim().split(",");
       if (!Array.isArray(tags)) tags = [tags];
