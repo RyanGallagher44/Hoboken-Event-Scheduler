@@ -1,6 +1,6 @@
 
 <h1 id="hbe-header-allevents">Hoboken Event Scheduler</h1>
-<div id="form">
+<div id="tag-search-form">
     <form action="/events/search" method="POST" id="search_event"> 
         <label for="search">Search By Event</label>
         <input id="search" name="eventSearchTerm"/>
@@ -13,12 +13,12 @@
     {{/if}}
 </div>
 <br>
-<div id="form">
+<div id="tag-filter-form">
     <form action="/events/filter" method="POST">
         <label for="searchTag">Filter By Tag</label>
         <select id="searchTag" name="eventSearchTag">
             {{#each tags}}
-            <option val="{{{this}}}">{{{this}}}</option>
+            <option value="{{{this}}}">{{{this}}}</option>
             {{/each}}
         </select>
         <button class="btn btn-primary" type="submit">Filter</button>
@@ -47,13 +47,6 @@
                     {{/each}}
                 </div>
             </div>
-            {{!-- <li><a id="event" href="/events/{{_id}}">{{name}} 
-            {{#each tags}}
-                <span class="bade badge-pill badge-info">{{{this}}}</span>
-            {{/each}}
-            </a>
-            </li> --}}
-           
         {{/each}}
     </div>
 </section>

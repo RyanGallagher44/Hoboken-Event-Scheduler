@@ -5,8 +5,20 @@ url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
     font-family: 'Varela Round', sans-serif;
 }
 
-#form {
-    text-align:center;
+#tag-search-form {
+    text-align: center;
+}
+
+#tag-filter-form {
+    text-align: center;
+}
+
+#pastEventsAttended {
+    text-align: center;
+}
+
+#pastEventsHosted {
+    text-align: center;
 }
 
 form {
