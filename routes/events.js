@@ -10,10 +10,12 @@ const xss=require('xss');
 router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
     req.session.prevURL = '/events';
-    if (xss(req.session.userId)) {
+    let userId = xss(req.session.userId);
+    if (userId) {
         try{
             let eventList=await allEvents.get_all_upcoming_events();
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
+            const user = await userData.get(xss(userId));
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${user.firstName} ${user.lastName}`, tags: allTags});
         } catch(e){
             res.status(400).json({e});
             return;
@@ -23,8 +25,10 @@ router.get('/', async (req, res) => {
 
 router.get('/add', async (req, res) => {
     //add creator check?
-    if(xss(req.session.userId)){
-        res.render('events/add', {title: "Create Event", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`});
+    let userId = xss(req.session.userId);
+    if(userId){
+        const user = userData.get(userId);
+        res.render('events/add', {title: "Create Event", loggedIn: true, name: `${user.firstName} ${user.lastName}`});
     }else {
         res.status(400).render('shows/user_not_loggedin', {title: "Not Logged In"})
     }
@@ -35,12 +39,14 @@ router.post('/search',async(req,res) => {
     let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(search,'Search Term');
+        let userId = xss(req.session.userId);
+        const user = await userData.get(xss(userId));
         try{
             let eventList=await allEvents.search_for_event(search);
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${user.firstName} ${user.lastName}`, tags: allTags});
         } catch(e){
             res.status(400);
-            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", error:e,hasErrorSearch:true, loggedIn: true, name: `${user.firstName} ${user.lastName}`, tags: allTags});
         }
         
     }catch(e){
@@ -58,12 +64,14 @@ router.post('/filter',async(req,res) => {
         if(!allTags.includes(tag)){
             throw 'Value is not equal to one of the options that the user can select';
         }
+        let userId = xss(req.session.userId);
+        const user = await userData.get(xss(userId));
         try{
             let eventList=await allEvents.get_events_by_tag(tag);
-            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${user.firstName} ${user.lastName}`, tags: allTags});
         } catch(e){
             res.status(400);
-            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${(await userData.get(xss(req.session.userId))).firstName} ${(await userData.get(xss(req.session.userId))).lastName}`, tags: allTags});
+            res.render('shows/all_events', {title: "All Events",events:eventList, error:e,hasErrorTag:true, loggedIn: true, name: `${user.firstName} ${user.lastName}`, tags: allTags});
         }
         
     }catch(e){

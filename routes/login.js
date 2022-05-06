@@ -6,7 +6,7 @@ const validation = require('../validation');
 const xss = require('xss');
 
 router.get('/', async (req, res) => {
-    if (req.session.userId) {
+    if (xss(req.session.userId)) {
         res.redirect('/events');
     } else {
         res.render('shows/login', {title: 'Login'});
@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', async (req, res) => {
-    if (req.session.userId) {
+    if (xss(req.session.userId)) {
         req.session.destroy();
         res.render('shows/logout', {title: 'Logged out'});
     } else {

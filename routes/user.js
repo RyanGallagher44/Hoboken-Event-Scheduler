@@ -1,21 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const validator = require('../validator');
+const validation = require('../validation');
 const userData = data.users;
 const xss=require('xss');
 
 router.get('/', async (req, res) => {
-    const pastHosted = await userData.getPastHostedEvents(req.session.userId);
-    const pastAttended = await userData.getPastAttendedEvents(req.session.userId);
-    const recommendedEvents = await userData.getRecommendedEvents(req.session.userId);
+    let userId = validation.checkId(xss(req.session.userId), "id");
+    const pastHosted = await userData.getPastHostedEvents(userId);
+    const pastAttended = await userData.getPastAttendedEvents(userId);
+    const recommendedEvents = await userData.getRecommendedEvents(userId);
     req.session.prevURL = '/user';
-    res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, age: `${(await userData.get(req.session.userId)).age}`, email: `${(await userData.get(req.session.userId)).email}`, events_hosted: pastHosted, events_attended: pastAttended, recommended_events: recommendedEvents, deletionAllowed: true})
+    const user = await userData.get(userId);
+    res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${user.firstName} ${user.lastName}`, profile_name: `${user.firstName} ${user.lastName}`, age: `${user.age}`, email: `${user.email}`, events_hosted: pastHosted, events_attended: pastAttended, recommended_events: recommendedEvents, deletionAllowed: true})
 });
 
 router.get('/delete', async (req, res) => {
     try {
-        await userData.remove(req.session.userId);
+        let userId = validation.checkId(xss(req.session.userId), "id");
+        await userData.remove(userId);
         res.redirect('/logout');
     } catch (e) {
         console.log(e);
@@ -24,12 +27,12 @@ router.get('/delete', async (req, res) => {
 
 router.get('/regEvents', async (req, res) => {
     try{
-        let userId = validator.checkId(xss(req.session.userId));
+        let userId = validation.checkId(xss(req.session.userId), "id");
         var evList = await userData.getRegisteredEvents(userId);
         const user = await userData.get(userId);
         req.session.prevURL = '/user/regEvents';
-        var userFirst = validator.checkString(user.firstName);
-        var userLast = validator.checkString(user.lastName);
+        var userFirst = validation.checkString(user.firstName, "First name");
+        var userLast = validation.checkString(user.lastName, "Last name");
     }
     catch(e){
         console.log(e);
@@ -39,7 +42,9 @@ router.get('/regEvents', async (req, res) => {
 
 router.get('/followers', async (req, res) => {
     try {
-        res.render('shows/followers', {title: "Followers", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, followers: (await userData.getFollowers(req.session.userId))});
+        let userId = validation.checkId(xss(req.session.userId), "id");
+        const user = await userData.get(userId);
+        res.render('shows/followers', {title: "Followers", loggedIn: true, name: `${user.firstName} ${user.lastName}`, followers: (await userData.getFollowers(userId))});
     } catch (e) {
         console.log(e);
     }
@@ -47,40 +52,49 @@ router.get('/followers', async (req, res) => {
 
 router.get('/following', async (req, res) => {
     try {
-        console.log(await userData.getFollowing(req.session.userId));
-        res.render('shows/following', {title: "Following", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, following: (await userData.getFollowing(req.session.userId))});
+        let userId = validation.checkId(xss(req.session.userId), "id");
+        console.log(await userData.getFollowing(userId));
+        const user = await userData.get(userId);
+        res.render('shows/following', {title: "Following", loggedIn: true, name: `${user.firstName} ${user.lastName}`, following: (await userData.getFollowing(userId))});
     } catch (e) {
         console.log(e);
     }
 });
 
 router.post('/follow', async (req, res) => {
-    await userData.addToFollowing(req.body.userToFollowId, req.session.userId);
-    await userData.addToFollowers(req.body.userToFollowId, req.session.userId);
+    let userId = validation.checkId(xss(req.session.userId), "id");
+    let userToFollowId = validation.checkId(xss(req.body.userToFollowId), "userToFollowId")
+    await userData.addToFollowing(userToFollowId, userId);
+    await userData.addToFollowers(userToFollowId, userId);
 
-    res.redirect(`/user/${req.body.userToFollowId}`);
+    res.redirect(`/user/${userToFollowId}`);
 });
 
 router.post('/unfollow', async (req, res) => {
-    await userData.removeFromFollowing(req.body.userToUnfollowId, req.session.userId);
-    await userData.removeFromFollowers(req.body.userToUnfollowId, req.session.userId);
+    let userId = validation.checkId(xss(req.session.userId), "id");
+    let userToUnfollowId = validation.checkId(xss(req.body.userToUnfollowId), "userToUnfollowId")
+    await userData.removeFromFollowing(userToUnfollowId, userId);
+    await userData.removeFromFollowers(userToUnfollowId, userId);
 
-    res.redirect(`/user/${req.body.userToUnfollowId}`);
+    res.redirect(`/user/${userToUnfollowId}`);
 });
 
 router.get('/:id', async (req, res) => {
-    if (req.params.id == req.session.userId) {
+    let id = validation.checkId(xss(req.params.id), "id");
+    let userId = validation.checkId(xss(req.session.userId), "userId");
+    if (userId==id) {
         return res.redirect('/user');
     }
     try {
-        const pastHosted = await userData.getPastHostedEvents(req.params.id);
-        const pastAttended = await userData.getPastAttendedEvents(req.params.id);
+        const pastHosted = await userData.getPastHostedEvents(id);
+        const pastAttended = await userData.getPastAttendedEvents(id);
         req.session.prevURL = '/user/other';
-        req.session.prevVisitedProfile = req.params.id;
-        if (((await userData.get(req.session.userId)).following).includes(req.params.id)) {
-            res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.params.id)).firstName} ${(await userData.get(req.params.id)).lastName}`, age: `${(await userData.get(req.params.id)).age}`, email: `${(await userData.get(req.params.id)).email}`, events_hosted: pastHosted, events_attended: pastAttended, otherUser: true, user_id: req.params.id, alreadyFollowing: true});
+        req.session.prevVisitedProfile = id;
+        const user = await userData.get(userId);
+        if ((user.following).includes(id)) {
+            res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${user.firstName} ${user.lastName}`, profile_name: `${(await userData.get(id)).firstName} ${(await userData.get(id)).lastName}`, age: `${(await userData.get(id)).age}`, email: `${(await userData.get(id)).email}`, events_hosted: pastHosted, events_attended: pastAttended, otherUser: true, user_id: id, alreadyFollowing: true});
         } else {
-            res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.params.id)).firstName} ${(await userData.get(req.params.id)).lastName}`, age: `${(await userData.get(req.params.id)).age}`, email: `${(await userData.get(req.params.id)).email}`, events_hosted: pastHosted, events_attended: pastAttended, otherUser: true, user_id: req.params.id});
+            res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${user.firstName} ${user.lastName}`, profile_name: `${(await userData.get(id)).firstName} ${(await userData.get(id)).lastName}`, age: `${(await userData.get(id)).age}`, email: `${(await userData.get(id)).email}`, events_hosted: pastHosted, events_attended: pastAttended, otherUser: true, user_id: id});
         }
     } catch (e) {
         console.log(e);
