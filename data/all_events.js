@@ -27,8 +27,8 @@ async function get_all_upcoming_events() {
     const currentDate = new Date();
     let upcomingEventList = [];
     for (let x of eventList) {
-        let eventDate = new Date(x.date);
-        if (eventDate >= currentDate) {
+        let eventDate = new Date(x.date + ' ' + x.time);
+        if (eventDate.getTime() >= currentDate.getTime()) {
             upcomingEventList.push(x);
         }
     }

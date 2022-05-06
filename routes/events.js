@@ -81,12 +81,12 @@ router.post('/add', async (req, res) => {
     let description = xss(req.body.description);
     let tags = xss(req.body.tags);
     
-    if (req.session.userId){
+    if (xss(req.session.userId)){
         try{
             name = validation.checkString(name, 'Name');
-            creator = validation.checkId(req.session.userId, 'Creator');
-            date = validation.checkDate(date, 'Date');
+            creator = validation.checkId(xss(req.session.userId), 'Creator');
             time = validation.checkTime(time, 'Time');
+            date = validation.checkDate(date, time, 'Date');
             location = validation.checkString(location, 'Location');
             description = validation.checkString(description, 'Description');
             tags = validation.formatTags(tags, 'Tags');
@@ -103,9 +103,7 @@ router.post('/add', async (req, res) => {
                     description,
                     tags
                 );
-                let allTags = await allEvents.get_all_tags();
-                let eventList=await allEvents.get_all_upcoming_events();
-                res.render('shows/all_events', {title: "All Events", events:eventList, loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, tags: allTags});
+                res.redirect('/events');
             }catch (e) {
                 console.log(e);
                 res.status(400).json({error: e});
