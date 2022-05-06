@@ -7,7 +7,11 @@
         {{#if myReg}}
             <a class="btn btn-light" href="/user/regEvents">Back to My Registered Events</a>
         {{else}}
-            <a class="btn btn-light" href="/user">Back to User Profile</a>
+            {{#if otherUser}}
+                <a class="btn btn-light" href="/user/{{otherUserId}}">Back to {{{otherUserName}}}'s Profile</a>
+            {{else}}
+                <a class="btn btn-light" href="/user">Back to User Profile</a>
+            {{/if}}
         {{/if}}
     {{/if}}
     <br>
@@ -18,7 +22,7 @@
         <div id="event-info">
             <h2>Event Information</h2>
             <h3>Event Creator</h3>
-            <p>{{{event_creator}}}</p>
+            <p><a class="btn btn-light" href="/user/{{creator_id}}">{{{event_creator}}}</a></p>
             <h3>Date of Event</h3>
             <p>{{{event_date}}}</p>
             <h3>Event Time</h3>

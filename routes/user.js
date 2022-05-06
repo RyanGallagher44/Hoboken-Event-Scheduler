@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const pastAttended = await userData.getPastAttendedEvents(req.session.userId);
     const recommendedEvents = await userData.getRecommendedEvents(req.session.userId);
     req.session.prevURL = '/user';
-    res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, age: `${(await userData.get(req.session.userId)).age}`, email: `${(await userData.get(req.session.userId)).email}`, events_hosted: pastHosted, events_attended: pastAttended, recommended_events: recommendedEvents})
+    res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, age: `${(await userData.get(req.session.userId)).age}`, email: `${(await userData.get(req.session.userId)).email}`, events_hosted: pastHosted, events_attended: pastAttended, recommended_events: recommendedEvents, deletionAllowed: true})
 });
 
 router.get('/delete', async (req, res) => {
@@ -35,6 +35,18 @@ router.get('/regEvents', async (req, res) => {
         console.log(e);
     }
     res.render("shows/registeredEvents", {title: "My Registered Events", name: `${userFirst} ${userLast}`, events: evList, loggedIn: true});
-})
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const pastHosted = await userData.getPastHostedEvents(req.params.id);
+        const pastAttended = await userData.getPastAttendedEvents(req.params.id);
+        req.session.prevURL = '/user/other';
+        req.session.prevVisitedProfile = req.params.id;
+        res.render('shows/user_profile', {title: "Your Profile", loggedIn: true, name: `${(await userData.get(req.session.userId)).firstName} ${(await userData.get(req.session.userId)).lastName}`, profile_name: `${(await userData.get(req.params.id)).firstName} ${(await userData.get(req.params.id)).lastName}`, age: `${(await userData.get(req.params.id)).age}`, email: `${(await userData.get(req.params.id)).email}`, events_hosted: pastHosted, events_attended: pastAttended})
+    } catch (e) {
+        console.log(e);
+    }
+});
 
 module.exports = router;

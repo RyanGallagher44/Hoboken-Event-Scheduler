@@ -13,10 +13,11 @@ const main = async () => {
   let eddie = await userFuncs.create("Eddie", "Ahn", "eahn@stevens.edu", "2", "29", "2000", "123", "123");
   let ethan = await userFuncs.create("Ethan", "Che", "eche@stevens.edu", "12", "16", "1999", "123", "123");
 
-  let hidenseek = await eventFuncs.createEvent("Hide and Seek", [calvin.id, phill.id, ryan.id], favardin.id, "2022-04-30", "12:00", "Palmer Lawn", "Hide and seek on Palmer Lawn", ["Outdoors", "Sports"]);
-  let freedogs = await eventFuncs.createEvent("Free Dog Giveaway", [calvin.id], calvin.id, "2022-05-03", "03:30", "Church Square Park", "Come and get a free dog, no questions asked", ["Free Stuff", "Outdoors"]);
-  let painting = await eventFuncs.createEvent("Bob Ross Painting", [phill.id, ethan.id, aaron.id, ryan.id], favardin.id, "2022-06-03", "10:15", "Bissinger", "Follow along with an episode of Bob Ross", ["Arts and Crafts", "Indoors"]);
-  let racing = await eventFuncs.createEvent("Shopping Cart Races", [phill.id, favardin.id, calvin.id, ryan.id, aaron.id, eddie.id, ethan.id], ryan.id, "2022-04-26", "05:00", "ShopRite of Hoboken", "Bring your own shopping cart...", ["Sports", "Indoors", "Shopping"]);
+  let hidenseek = await eventFuncs.createEvent("Hide and Seek", [calvin.id, phill.id, ryan.id], favardin.id, "2022-05-12", "12:00", "Palmer Lawn", "Hide and seek on Palmer Lawn", ["Outdoors", "Sports"]);
+  let freedogs = await eventFuncs.createEvent("Free Dog Giveaway", [calvin.id], calvin.id, "2022-05-18", "03:30", "Church Square Park", "Come and get a free dog, no questions asked", ["Free Stuff", "Outdoors"]);
+  let painting = await eventFuncs.createEvent("Bob Ross Painting", [phill.id, ethan.id, aaron.id, ryan.id], favardin.id, "2022-05-14", "10:15", "Bissinger", "Follow along with an episode of Bob Ross", ["Arts and Crafts", "Indoors"]);
+  let racing = await eventFuncs.createEvent("Shopping Cart Races", [phill.id, favardin.id, calvin.id, ryan.id, aaron.id, eddie.id, ethan.id], ryan.id, "2022-06-01", "05:00", "ShopRite of Hoboken", "Bring your own shopping cart...", ["Sports", "Indoors", "Shopping"]);
+  let rollerhockey = await eventFuncs.createEvent("Roller Hockey Tournament", [], ryan.id, "2022-05-21", "01:00", "124 Grand Street", "Come alone or with a team!", ["Sports", "Outdoors"]);
   console.log('Done seeding database');
   await dbConnection.closeConnection();
 };
