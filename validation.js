@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { ObjectId } = require('mongodb'); //need this for ObjectID
+const emailValidator = require('email-validator');
 
 module.exports = {
     checkId(id, varName) {
@@ -60,7 +61,7 @@ module.exports = {
         let current = new Date();
         console.log('temp:' + temp);
         console.log('current: ' + current);
-        if (temp.getTime() + 90000000 < current.toLocaleTimeString()) throw `${varName} must be a time in the future`
+        if (temp.getTime() < current.getTime()) throw `${varName} must be a time in the future`
         return date;
     },
 
@@ -69,5 +70,24 @@ module.exports = {
         let timeReg = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
         if (!time.match(timeReg)) throw `${varName} must be a valid time.`;
         return time;
+    },
+
+    checkEmail(addr){
+      addr = this.checkString(addr, "Email");
+      if(!emailValidator.validate(addr)) throw "You must supply a valid email address.";
+  
+      return addr;
+    },
+
+    checkPassword(pwd) {
+      if (!pwd) throw 'You must supply a password!';
+  
+      return pwd;
+    },
+  
+    checkConfirmPassword(pwd) {
+      if (!pwd) throw 'You must confirm your password!';
+  
+      return pwd;
     }
 }
