@@ -84,6 +84,76 @@ async function get(id) { //validate
     return user;
 }
 
+async function addToFollowing(userToFollowId, userId) {
+    const userCollection = await users();
+
+    let user = await userCollection.findOne({_id: ObjectId(userId)});
+    if (!user) throw "No user with that ID";
+    if (!(user.following.includes(userToFollowId))) {
+        let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{following: userToFollowId}});
+    }
+
+    return {followed: true};
+}
+
+async function addToFollowers(userToFollowId, userId) {
+    const userCollection = await users();
+
+    let user = await userCollection.findOne({_id: ObjectId(userToFollowId)});
+    if (!user) throw "No user with that ID";
+    if (!(user.followers.includes(userId))) {
+        let updated = await userCollection.updateOne({_id: ObjectId(userToFollowId)}, {$push:{followers: userId}});
+    }
+
+    return {followed: true};
+}
+
+async function removeFromFollowing(userToUnfollowId, userId) {
+    const userCollection = await users();
+
+    let user = await userCollection.findOne({_id: ObjectId(userId)});
+    if (!user) throw "No user with that ID";
+    if (user.following.includes(userToUnfollowId)) {
+        let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{following: userToUnfollowId}});
+    }
+
+    return {unfollowed: true};
+}
+
+async function removeFromFollowers(userToUnfollowId, userId) {
+    const userCollection = await users();
+
+    let user = await userCollection.findOne({_id: ObjectId(userToUnfollowId)});
+    if (!user) throw "No user with that ID";
+    if (user.followers.includes(userId)) {
+        let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{followers: userId}});
+    }
+
+    return {unfollowed: true};
+}
+
+async function getFollowing(id) {
+    let user = await this.get(id);
+
+    let followingList = [];
+    for (let i = 0; i < (user.following).length; i++) {
+        followingList.push((await this.get(user.following[i])));
+    }
+
+    return followingList;
+}
+
+async function getFollowers(id) {
+    let user = await this.get(id);
+
+    let followersList = [];
+    for (let i = 0; i < (user.followers).length; i++) {
+        followersList.push((await this.get(user.followers[i])));
+    }
+
+    return followersList;
+}
+
 async function joinEvent(eventId, userId) {
     eventId = validation.checkId(eventId, 'Event ID');
     userId = validation.checkId(userId, 'User ID');
@@ -263,5 +333,11 @@ module.exports = {
     getRegisteredEvents,
     getPastHostedEvents,
     getPastAttendedEvents,
-    getRecommendedEvents
+    getRecommendedEvents,
+    addToFollowing,
+    addToFollowers,
+    getFollowers,
+    getFollowing,
+    removeFromFollowing,
+    removeFromFollowers
 }

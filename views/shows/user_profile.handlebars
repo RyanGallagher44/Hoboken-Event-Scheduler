@@ -2,11 +2,27 @@
     <h1>{{{profile_name}}}</h1>
     <h2>{{{age}}}</h2>
     <h3>{{{email}}}</h3>
-    <hr>
-
     {{#if otherUser}}
-        <button class="btn btn-primary">Follow</button>
+        {{#if alreadyFollowing}}
+            <form action="/user/unfollow" method="POST">
+                <label hidden for="uid">user id</label>
+                <input hidden id="uid" name="userToUnfollowId" value={{user_id}} />
+                <button class="btn btn-primary" type="submit">Unfollow</button>
+            </form>
+        {{else}}
+            <form action="/user/follow" method="POST">
+                <label hidden for="uid">user id</label>
+                <input hidden id="uid" name="userToFollowId" value={{user_id}} />
+                <button class="btn btn-primary">Follow</button>
+            </form>
+        {{/if}}
+    {{else}}
+        <div>
+            <a class="btn btn-light" href="/user/following">Following</a>
+            <a class="btn btn-light" href="/user/followers">Followers</a>
+        </div>
     {{/if}}
+    <hr>
 
     {{#if recommended_events}}
         <div id="recommendedEvents">
