@@ -79,7 +79,7 @@ async function get(id) { //validate
     const userCollection = await users();
 
     const user = await userCollection.findOne({ _id: ObjectId(id) });
-    if (user === null) throw `There is no user with the ID of ${id}`;
+    if (!user) throw `There is no user with the ID of ${id}`;
 
     return user;
 }
