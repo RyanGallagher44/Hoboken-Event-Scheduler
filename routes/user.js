@@ -39,7 +39,7 @@ router.get('/regEvents', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     if (req.params.id == req.session.userId) {
-        res.redirect('/');
+        return res.redirect('/user');
     }
     try {
         const pastHosted = await userData.getPastHostedEvents(req.params.id);
