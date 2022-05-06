@@ -34,7 +34,8 @@ async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password,
         email: email,
         age: age.years,
         regEvents: [],
-        interests: [],
+        following: [],
+        followers: [],
         hashedPassword: hashedPassword
     };
 
@@ -188,6 +189,7 @@ async function getPastHostedEvents(userId) {
     const eventList = await eventCollection.find({}).toArray();
     if (!eventList) throw "Error: Could not get all events";
 
+    const currentDate = new Date();
     for (let i = 0; i < eventList.length; i++){
         let eventDate = new Date(eventList[i].date + ' ' + eventList[i].time);
         if (eventDate.getTime() < currentDate.getTime()) {
