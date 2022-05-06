@@ -181,27 +181,23 @@ async function getRegisteredEvents(userId){
 }
 
 async function getPastHostedEvents(userId) {
-    userId = validation.checkId(userId, "User ID");
+    userId = validation.checkId(userId, "getpastHost: User ID");
     let evList = [];
     const eventCollection=await events();
 
     const eventList = await eventCollection.find({}).toArray();
     if (!eventList) throw "Error: Could not get all events";
 
-    const currentDate = new Date();
     for (let i = 0; i < eventList.length; i++){
-        let eventDate = new Date(eventList[i].date);
-        if (eventDate < currentDate) {
-            if (eventList[i].creator == userId) {
-                evList.push(eventList[i]);
-            }
+        if (eventList[i].creator == userId) {
+            evList.push(eventList[i]);
         }
     }
     return evList;
 }
 
 async function getPastAttendedEvents(userId) {
-    userId = validation.checkId(userId, "User ID");
+    userId = validation.checkId(userId, "getpastAttend: User ID");
     let evList = [];
     const eventCollection=await events();
 
