@@ -6,6 +6,40 @@ function isLeapYear(year) {
     return false;
 }
 
+function checkPassword(pwd) {
+    if (!pwd) throw 'You must supply a password!';
+
+    return pwd;
+}
+
+function checkConfirmPassword(pwd) {
+    if (!pwd) throw 'You must confirm your password!';
+
+    return pwd;
+}
+
+function checkString(strVal, varName) {
+    if (!strVal) throw `Error: You must supply a ${varName}!`;
+    if (typeof strVal !== 'string') throw `Error: ${varName} must be a string!`;
+    strVal = strVal.trim();
+    if (strVal.length === 0)
+    throw `Error: ${varName} cannot be an empty string or string with just spaces.`;
+    return strVal;
+}
+
+function checkDate(date, varName) {
+    console.log(date);
+    console.log(varName);
+    date = this.checkString(date, varName);
+    console.log(date);
+    let temp = new Date(date);
+    console.log(temp);
+    if (!temp) throw `Error: Must ${varName} be a valid date string`;
+    let current = new Date();
+    if (temp.getTime() > current.getTime()) throw `Error: ${varName} must be a time in the past`
+    return date;
+}
+
 (function ($) {
     /*
     Date of Birth on Sign Up Functionality
@@ -169,33 +203,20 @@ function isLeapYear(year) {
         var year = $('#signup-year').val();
         var password = $('#signup-password').val();
         var passwordConfirm = $('#signup-password-confirm').val();
-        /*
-        if (!firstName || firstName.trim().length == 0) {
-            $('#signup-firstname').addClass('signup-input-error');
-            $('.signup-error-div').text('You must supply a first name!');
-            $('.signup-error-div').show();
-        } else {
-            $('#signup-firstname').removeClass('signup-input-error');
-            $('.signup-error-div').empty();
-            $('.signup-error-div').show();
-        }
-        if (!lastName || lastName.trim().length == 0) {
-            $('#signup-lastname').addClass('signup-input-error');
-            $('.signup-error-div').text('You must supply a last name!');
-            $('.signup-error-div').show();
-        } else {
-            $('#signup-lastname').removeClass('signup-input-error');
-            $('.signup-error-div').empty();
-            $('.signup-error-div').hide();
-        }
-        if (validated) {
-            console.log('should be submitting');
+        var dob = '';
+        
+        try {
+            firstName = checkString(firstName, "first name");
+            lastName = checkString(lastName, "last name");
+            email = checkString(email, "email");
+            dob = checkDate(`${year}-${month}-${day}`, "date of birth");
+            password = checkPassword(password);
+            passwordConfirm = checkConfirmPassword(passwordConfirm);
             $(this).unbind();
             $(this).submit();
+        } catch (e) {
+            console.log(e);
         }
-        */
-       $(this).unbind();
-       $(this).submit();
     });
 
     //AJAX post to join event
