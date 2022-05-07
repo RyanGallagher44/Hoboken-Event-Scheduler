@@ -47,7 +47,7 @@ const createEvent = async function createEvent(name, users_registered, creator, 
     let lastName = user.lastName;
     
     const currentDate = new Date();
-    let updated = await userCollection.updateOne({_id: ObjectId(creator)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${firstName} ${lastName} created a new event: ${name}!`}}});
+    let updated = await userCollection.updateOne({_id: ObjectId(creator)}, {$push:{activity: {link: `/events/${insertInfo.insertedId}`, time: `${currentDate}`, str: `${firstName} ${lastName} created a new event: ${name}!`}}});
 
     return true;
 }

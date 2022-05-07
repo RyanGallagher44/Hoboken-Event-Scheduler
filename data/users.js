@@ -95,7 +95,7 @@ async function addToFollowing(userToFollowId, userId) {
     }
 
     const currentDate = new Date();
-    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} followed ${(await this.get(userToFollowId)).firstName} ${(await this.get(userToFollowId)).lastName}`}}});
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {link: `/user/${userToFollowId}`, time: `${currentDate}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} followed ${(await this.get(userToFollowId)).firstName} ${(await this.get(userToFollowId)).lastName}`}}});
 
     return {followed: true};
 }
@@ -122,7 +122,7 @@ async function removeFromFollowing(userToUnfollowId, userId) {
     }
 
     const currentDate = new Date();
-    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} unfollowed ${(await this.get(userToUnfollowId)).firstName} ${(await this.get(userToUnfollowId)).lastName}`}}});
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {link: `/user/${userToUnfollowId}`, time: `${currentDate}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} unfollowed ${(await this.get(userToUnfollowId)).firstName} ${(await this.get(userToUnfollowId)).lastName}`}}});
 
     return {unfollowed: true};
 }
@@ -178,7 +178,7 @@ async function joinEvent(eventId, userId) {
     await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: 1}});
     
     const currentDate = new Date();
-    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} registered for ${(await eventData.get(eventId)).name} hosted by ${(await this.get((await eventData.get(eventId)).creator)).firstName} ${(await this.get((await eventData.get(eventId)).creator)).lastName}`}}});
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {link: `/events/${eventId}`, time: `${currentDate}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} registered for ${(await eventData.get(eventId)).name} hosted by ${(await this.get((await eventData.get(eventId)).creator)).firstName} ${(await this.get((await eventData.get(eventId)).creator)).lastName}`}}});
 
     return true;
 }
@@ -195,7 +195,7 @@ async function unjoinEvent(eventId, userId) {
     await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: -1}});
 
     const currentDate = new Date();
-    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} unregistered for ${(await eventData.get(eventId)).name} hosted by ${(await this.get((await eventData.get(eventId)).creator)).firstName} ${(await this.get((await eventData.get(eventId)).creator)).lastName}`}}});
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {link: `/events/${eventId}`, time: `${currentDate}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} unregistered for ${(await eventData.get(eventId)).name} hosted by ${(await this.get((await eventData.get(eventId)).creator)).firstName} ${(await this.get((await eventData.get(eventId)).creator)).lastName}`}}});
 
     return true;
 }
@@ -295,7 +295,6 @@ async function getPastAttendedEvents(userId) {
     const currentDate = new Date();
     for (let i = 0; i < eventList.length; i++){
         let eventDate = new Date(eventList[i].date + ' ' + eventList[i].time);
-        console.log("event time: " + eventList[i].name + " - " + eventDate);
         if (eventDate.getTime() < currentDate.getTime()) {
             if (eventList[i].users_registered.includes(userId)) {
                 evList.push(eventList[i]);
@@ -347,6 +346,8 @@ async function getActivityFeed(userId) {
             activityFeed.push(f.activity[j]);
         }
     }
+
+    activityFeed.sort((x, y) => (x.time > y.time) ? 1 : -1);
 
     return activityFeed;
 }
