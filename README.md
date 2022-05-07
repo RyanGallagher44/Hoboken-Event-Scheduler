@@ -12,4 +12,4 @@ Welcome to our final project, the Hoboken Event Scheduler!
   Finally, run 'npm start'! The website is at: http://localhost:3000
 
 
-Note: The event recommendation feature of our app works based off of previously attended events. However, the functions do not let you create an event in the past. So to see this feature in action, you can: run the seed file; register for an event; manually change the date of that event to have occured in the past.
+Note: The event recommendation feature of our app works based off of previously attended events. However, our app does not let you create an event in the past. So to see this feature in action, you can: run the seed file; register for an event; manually change the date of that event in MongoDB to have occured in the past. Doing this will also allow you to see past events attended/hosted in the user profile page.
