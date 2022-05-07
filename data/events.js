@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const events = mongoCollections.events;
+const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 const validation = require('../validation');
 
@@ -14,6 +15,7 @@ const createEvent = async function createEvent(name, users_registered, creator, 
     tags = validation.checkStringArray(tags, 'Tags', 1);
 
     const eventCollection = await events();
+    const userCollection = await users();
 
     let numAttending = 0;
     if (!users_registered) { 
@@ -39,6 +41,13 @@ const createEvent = async function createEvent(name, users_registered, creator, 
     if (!insertInfo.acknowledged || !insertInfo.insertedId){
       throw 'Could not add event';
     }
+
+    let user = await userCollection.findOne({_id: ObjectId(creator)});
+    let firstName = user.firstName;
+    let lastName = user.lastName;
+    
+    const currentDate = new Date();
+    let updated = await userCollection.updateOne({_id: ObjectId(creator)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${firstName} ${lastName} created a new event: ${name}!`}}});
 
     return true;
 }

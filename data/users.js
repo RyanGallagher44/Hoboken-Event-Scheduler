@@ -177,6 +177,9 @@ async function joinEvent(eventId, userId) {
 
     await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: 1}});
     
+    const currentDate = new Date();
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} registered for ${(await eventData.get(eventId)).name} hosted by ${(await this.get((await eventData.get(eventId)).creator)).firstName} ${(await this.get((await eventData.get(eventId)).creator)).lastName}`}}});
+
     return true;
 }
 
@@ -190,6 +193,9 @@ async function unjoinEvent(eventId, userId) {
     let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{regEvents: eventId}});
     
     await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: -1}});
+
+    const currentDate = new Date();
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} unregistered for ${(await eventData.get(eventId)).name} hosted by ${(await this.get((await eventData.get(eventId)).creator)).firstName} ${(await this.get((await eventData.get(eventId)).creator)).lastName}`}}});
 
     return true;
 }
@@ -330,6 +336,21 @@ async function getRecommendedEvents(userId) { //Returns list of event objects th
     return evList;
 }
 
+async function getActivityFeed(userId) {
+    userId = validation.checkId(userId, "User ID");
+    let user = await this.get(userId);
+    
+    let activityFeed = [];
+    for (let i = 0; i < user.following.length; i++) {
+        let f = await this.get(user.following[i]);
+        for (let j = 0; j < f.activity.length; j++) {
+            activityFeed.push(f.activity[j]);
+        }
+    }
+
+    return activityFeed;
+}
+
 module.exports = {
     create,
     check,
@@ -346,5 +367,6 @@ module.exports = {
     getFollowers,
     getFollowing,
     removeFromFollowing,
-    removeFromFollowers
+    removeFromFollowers,
+    getActivityFeed
 }
