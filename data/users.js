@@ -236,6 +236,17 @@ async function remove(id) {
         await eventCollection.updateOne({_id: ObjectId(user.regEvents[i])},{$inc:{numAttending: -1}});
     }
 
+    for (let i = 0; i < user.followers.length; i++) {
+        await userCollection.updateOne({_id: ObjectId(user.followers[i])},{$pull:{following: id}});
+    }
+
+    let userList = await userCollection.find({}).toArray();
+    for (let i = 0; i < userList.length; i++) {
+        if (userList[i].followers.includes(id)) {
+            await userCollection.updateOne({_id: ObjectId(userList[i]._id)},{$pull:{followers: id}});
+        }
+    }
+
     const deleteInfo = await userCollection.deleteOne({ _id: ObjectId(id) });
     if (deleteInfo.deletedCount === 0) throw `Could not delete user with the ID of ${id}!`;
 
