@@ -27,13 +27,9 @@ function checkString(strVal, varName) {
     return strVal;
 }
 
-function checkDate(date, varName) {
-    console.log(date);
-    console.log(varName);
+function checkDateOfBirth(date, varName) {
     date = this.checkString(date, varName);
-    console.log(date);
     let temp = new Date(date);
-    console.log(temp);
     if (!temp) throw `Error: Must ${varName} be a valid date string`;
     let current = new Date();
     if (temp.getTime() > current.getTime()) throw `Error: ${varName} must be a time in the past`
@@ -41,76 +37,6 @@ function checkDate(date, varName) {
 }
 
 (function ($) {
-    /*
-    Date of Birth on Sign Up Functionality
-    */
-    var signupMonth = '';
-    var months = ['Select', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-    for (let i = 0; i < months.length; i++) {
-        signupMonth += `<option value="${months[i]}">${months[i]}</option>`;
-    }
-    $('#signup-month').html(signupMonth);
-
-    var signupYear = '<option value="Select">Select</option>';
-    for (let i = 1900; i <= 2022; i++) {
-        signupYear += `<option value="${i}">${i}</option>`;
-    }
-    $('#signup-year').html(signupYear);
-
-    $('#signup-day').html('<option value="Select">Select</option>')
-
-    var daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    $('#signup-month').on('change', function () {
-        var selectedMonth = months.indexOf($('#signup-month').val())-1;
-        if ($('#signup-year').val() != 'Select') {
-            if (selectedMonth == 1) {
-                var ly = isLeapYear($('#signup-year').val());
-                if (ly) {
-                    daysInMonth[1] = 29;
-                }
-            }
-        }
-        var selectedDay = $('#signup-day').val();
-        if (selectedDay > daysInMonth[selectedMonth]) {
-            selectedDay = daysInMonth[selectedMonth];
-        }
-        $('#signup-day').empty();
-        var signupDay = '<option value="Select">Select</option>';
-        for (let i = 1; i <= daysInMonth[selectedMonth]; i++) {
-            signupDay += `<option value="${i}">${i}</option>`;
-        }
-        $('#signup-day').html(signupDay);
-        $('#signup-day').val(selectedDay);
-        daysInMonth[1] = 28;
-    });
-
-    $('#signup-year').on('change', function () {
-        var selectedMonth = months.indexOf($('#signup-month').val())-1;
-        if ($('#signup-year').val() != 'Select') {
-            if (selectedMonth == 1) {
-                var ly = isLeapYear($('#signup-year').val());
-                if (ly) {
-                    daysInMonth[1] = 29;
-                }
-            }
-        }
-        var selectedDay = $('#signup-day').val();
-        if (selectedDay > daysInMonth[selectedMonth]) {
-            selectedDay = daysInMonth[selectedMonth];
-        }
-        $('#signup-day').empty();
-        var signupDay = '<option value="Select">Select</option>';
-        for (let i = 1; i <= daysInMonth[selectedMonth]; i++) {
-            signupDay += `<option value="${i}">${i}</option>`;
-        }
-        $('#signup-day').html(signupDay);
-        $('#signup-day').val(selectedDay);
-        daysInMonth[1] = 28;
-    });
-    /*
-    End of DOB functionality
-    */
-
     $('.login-error-div').hide();
     $('.signup-error-div').hide();
     $('#delete-act-div').hide();
@@ -177,15 +103,10 @@ function checkDate(date, varName) {
         var email = $('#login-email').val();
         var password = $('#login-password').val();
         if (!email || email.trim().length == 0 || !password || password.trim().length == 0) {
-            $('#login-email').addClass('login-input-error');
-            $('#login-password').addClass('login-input-error');
             $('.login-error-div').show();
             $('#login-form').trigger('reset');
             $('#login-email').trigger('focus');
-        }
-        else {
-            $('#login-email').removeClass('login-input-error');
-            $('#login-password').removeClass('login-input-error');
+        } else {
             $('.login-error-div').hide();
             $(this).unbind();
             $(this).submit();
@@ -198,18 +119,15 @@ function checkDate(date, varName) {
         var firstName = $('#signup-firstname').val();
         var lastName = $('#signup-lastname').val();
         var email = $('#signup-email').val();
-        var month = $('#signup-month').val();
-        var day = $('#signup-day').val();
-        var year = $('#signup-year').val();
+        var dob = $('#signup-dob').val();
         var password = $('#signup-password').val();
         var passwordConfirm = $('#signup-password-confirm').val();
-        var dob = '';
         
         try {
             firstName = checkString(firstName, "first name");
             lastName = checkString(lastName, "last name");
             email = checkString(email, "email");
-            dob = checkDate(`${year}-${month}-${day}`, "date of birth");
+            dob = checkDateOfBirth(dob, "date of birth");
             password = checkPassword(password);
             passwordConfirm = checkConfirmPassword(passwordConfirm);
             $(this).unbind();

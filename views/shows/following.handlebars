@@ -1,6 +1,8 @@
-<h1>Following</h1>
-<ul>
-    {{#each following}}
-        <li><a class="btn btn-light" href="/user/{{_id}}">{{firstName}} {{lastName}}</a></li>
-    {{/each}}
-</ul>
+<h1 id="allevents-header">Following</h1>
+<div class="justify-content-center text-center">
+    <ul class="list-unstyled">
+        {{#each following}}
+            <li><a class="btn btn-light" href="/user/{{_id}}">{{firstName}} {{lastName}}</a></li>
+        {{/each}}
+    </ul>
+</div>

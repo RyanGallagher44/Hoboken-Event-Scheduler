@@ -8,18 +8,18 @@ const validation = require('../validation');
 const eventData = require('../data/events');
 const ageCalculator = require('calculate-age').default;
 
-async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password, passwordConfirm) {
+async function create(firstName, lastName, email, dob, password, passwordConfirm) {
     const userCollection = await users();
 
     firstName = validation.checkString(firstName, 'First name');
     lastName = validation.checkString(lastName, 'Last name');
     email = validation.checkEmail(email);
-    // validate month, day, and year somehow
+    dob = validation.checkDateOfBirth(dob, 'date of birth');
     password = validation.checkPassword(password);
     passwordConfirm = validation.checkConfirmPassword(passwordConfirm);
 
     const date = new Date();
-    const age = new ageCalculator(`${dob_y}-${dob_m}-${dob_d}`, `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`).getObject();
+    const age = new ageCalculator(dob, `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`).getObject();
 
     if (password !== passwordConfirm) throw "Passwords do not match!";
 
@@ -36,6 +36,7 @@ async function create(firstName, lastName, email, dob_m, dob_d, dob_y, password,
         regEvents: [],
         following: [],
         followers: [],
+        activity: [],
         hashedPassword: hashedPassword
     };
 
@@ -93,6 +94,9 @@ async function addToFollowing(userToFollowId, userId) {
         let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{following: userToFollowId}});
     }
 
+    const currentDate = new Date();
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} followed ${(await this.get(userToFollowId)).firstName} ${(await this.get(userToFollowId)).lastName}`}}});
+
     return {followed: true};
 }
 
@@ -116,6 +120,9 @@ async function removeFromFollowing(userToUnfollowId, userId) {
     if (user.following.includes(userToUnfollowId)) {
         let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{following: userToUnfollowId}});
     }
+
+    const currentDate = new Date();
+    updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{activity: {time: `${currentDate.getHours()}:${currentDate.getMinutes()}`, str: `${(await this.get(userId)).firstName} ${(await this.get(userId)).lastName} unfollowed ${(await this.get(userToUnfollowId)).firstName} ${(await this.get(userToUnfollowId)).lastName}`}}});
 
     return {unfollowed: true};
 }

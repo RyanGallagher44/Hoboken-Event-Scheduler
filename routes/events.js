@@ -27,7 +27,7 @@ router.get('/add', async (req, res) => {
     //add creator check?
     let userId = xss(req.session.userId);
     if(userId){
-        const user = userData.get(userId);
+        const user = await userData.get(userId);
         res.render('events/add', {title: "Create Event", loggedIn: true, name: `${user.firstName} ${user.lastName}`});
     }else {
         res.status(400).render('shows/user_not_loggedin', {title: "Not Logged In"})
