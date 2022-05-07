@@ -13,8 +13,8 @@ router.post('/', async (req, res) => {
         event_id = validation.checkId(xss(req.body.event_id), 'Event ID');
         user_id = validation.checkId(xss(req.body.user_id), 'User ID');
         comment = validation.checkString(xss(req.body.comment_text), 'Comment');
-    } catch (error) { //this shouldnt happen
-        res.status(400).json({error});
+    } catch (e) { //this shouldnt happen
+        res.status(400).json({error: e});
         return;
     }
 
@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
 
     try {
         events.addComment(event_id, user_id, comment, today)
-    } catch (error) {
-        res.status(400).json({error});
+    } catch (e) {
+        res.status(400).json({error: e});
         return;
     }
 
