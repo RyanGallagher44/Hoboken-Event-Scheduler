@@ -25,6 +25,12 @@ router.get('/delete', async (req, res) => {
     }
 });
 
+router.get('/feed', async (req, res) => {
+    let userId = validation.checkId(xss(req.session.userId), "id");
+    const user = await userData.get(userId);
+    res.render('shows/activity_feed', {title: "Your Feed", loggedIn: true, name: `${user.firstName} ${user.lastName}`, activity: (await userData.getActivityFeed(userId))});
+});
+
 router.get('/regEvents', async (req, res) => {
     try{
         let userId = validation.checkId(xss(req.session.userId), "id");
