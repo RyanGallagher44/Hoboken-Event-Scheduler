@@ -1,11 +1,13 @@
 <h1 id="allevents-header">Activity Feed</h1>
 <div class="justify-content-center text-center">
-    <ul class="list-unstyled">
+    <div class="list-group">
         {{#each activity}}
-            <ul class="list-unstyled">
-                <li>{{{str}}}</li>
-                <li>{{{time}}}</li>
-            </ul>
+            <a href="{{{link}}}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-center">
+                    <h5 class="mb-1">{{{str}}}</h5>
+                </div>
+                <small>{{{time}}}</small>
+            </a>
         {{/each}}
-    </ul>
+    </div>
 </div>

@@ -39,8 +39,8 @@
                 <a class="btn btn-light" href="/signup">Need to register? Click here!</a>
             </div>
         </div>
+        {{#if error}}
+        <p class="login-error">{{{error}}}</p>
+        {{/if}}
     </div>
 </div>
-{{#if error}}
-<p class="login-error">{{{error}}}</p>
-{{/if}}

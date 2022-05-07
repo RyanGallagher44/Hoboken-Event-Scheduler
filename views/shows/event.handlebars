@@ -4,13 +4,17 @@
     {{#if home}}
         <a class="btn btn-light" href="/">Back to Home</a>
     {{else}}
-        {{#if myReg}}
-            <a class="btn btn-light" href="/user/regEvents">Back to My Registered Events</a>
+        {{#if feed}}
+            <a class="btn btn-light" href="/user/feed">Back to Activity Feed</a>
         {{else}}
-            {{#if otherUser}}
-                <a class="btn btn-light" href="/user/{{otherUserId}}">Back to {{{otherUserName}}}'s Profile</a>
+            {{#if myReg}}
+                <a class="btn btn-light" href="/user/regEvents">Back to My Registered Events</a>
             {{else}}
-                <a class="btn btn-light" href="/user">Back to User Profile</a>
+                {{#if otherUser}}
+                    <a class="btn btn-light" href="/user/{{otherUserId}}">Back to {{{otherUserName}}}'s Profile</a>
+                {{else}}
+                    <a class="btn btn-light" href="/user">Back to User Profile</a>
+                {{/if}}
             {{/if}}
         {{/if}}
     {{/if}}
@@ -57,7 +61,6 @@
                         <button class="btn btn-primary" type="submit">Unregister for Event</button>
                     </form>
                 {{else}}
-                    <p>You cannot register for an event on the day of - you must register by or at 11:59PM on the day BEFORE the event.</p>
                     <form id="join_event_data">
                         <label hidden for="eid">event id</label>
                         <input hidden id="eid" name="event_id" value={{event_id}} />

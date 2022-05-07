@@ -122,10 +122,14 @@ function checkDateOfBirth(date, varName) {
             dob = checkDateOfBirth(dob, "date of birth");
             password = checkPassword(password);
             passwordConfirm = checkConfirmPassword(passwordConfirm);
+            if (password !== passwordConfirm) throw 'Password do not match!';
+            $('.signup-error-div').hide();
             $(this).unbind();
             $(this).submit();
         } catch (e) {
             console.log(e);
+            $('.signup-error-div').text(e);
+            $('.signup-error-div').show();
         }
     });
 

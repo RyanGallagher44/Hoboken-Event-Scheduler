@@ -28,6 +28,7 @@ router.get('/delete', async (req, res) => {
 router.get('/feed', async (req, res) => {
     let userId = validation.checkId(xss(req.session.userId), "id");
     const user = await userData.get(userId);
+    req.session.prevURL = '/user/feed';
     res.render('shows/activity_feed', {title: "Your Feed", loggedIn: true, name: `${user.firstName} ${user.lastName}`, activity: (await userData.getActivityFeed(userId))});
 });
 
@@ -86,8 +87,16 @@ router.post('/unfollow', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-    let id = validation.checkId(xss(req.params.id), "id");
-    let userId = validation.checkId(xss(req.session.userId), "userId");
+    let userId = undefined;
+    let id = undefined;
+
+    try {
+        id = validation.checkId(xss(req.params.id), "id");
+        userId = validation.checkId(xss(req.session.userId), "userId");
+    } catch (e) {
+        return res.status(404).json({error: e});
+    }
+
     if (userId==id) {
         return res.redirect('/user');
     }
