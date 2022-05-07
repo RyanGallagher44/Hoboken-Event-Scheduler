@@ -10,7 +10,7 @@ const xss=require('xss');
 router.get('/', async (req, res) => {
     let allTags = await allEvents.get_all_tags();
     req.session.prevURL = '/events';
-    let userId = xss(req.session.userId);
+    let userId = validation.checkId(xss(req.session.userId), "id");
     if (userId) {
         try{
             let eventList=await allEvents.get_all_upcoming_events();
@@ -24,8 +24,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/add', async (req, res) => {
-    //add creator check?
-    let userId = xss(req.session.userId);
+    let userId = validation.checkId(xss(req.session.userId), "id");
     if(userId){
         const user = await userData.get(userId);
         res.render('events/add', {title: "Create Event", loggedIn: true, name: `${user.firstName} ${user.lastName}`});
@@ -39,7 +38,7 @@ router.post('/search',async(req,res) => {
     let allTags = await allEvents.get_all_tags();
     try{
         search=validation.checkString(search,'Search Term');
-        let userId = xss(req.session.userId);
+        let userId = validation.checkId(xss(req.session.userId), "id");
         const user = await userData.get(xss(userId));
         try{
             let eventList=await allEvents.search_for_event(search);

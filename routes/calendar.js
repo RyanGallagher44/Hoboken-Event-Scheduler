@@ -10,14 +10,15 @@ router.get('/', async (req, res) => {
         res.render('shows/login', {title: 'Sign Up'});
         return
     }
+    
     let user = undefined;
     try {
         user = await users.get(req.session.userId);
-    } catch (error) { //shouldn't happen
-        res.status(400).json({error});
+    } catch (e) { //shouldn't happen
+        res.status(400).json({error: e});
     }
-    let events = user.regEvents; //list of evvents that the user is signed up for
 
+    let events = user.regEvents; //list of events that the user is signed up for
     let event_name_list = []; //array of object names
     let event_date_list = []; //array of object names
 
@@ -27,7 +28,11 @@ router.get('/', async (req, res) => {
         event_date_list.push(event.date);
     }
     
-    res.render('shows/calendar', {title: 'Calendar', loggedIn: true, event_names: event_name_list, event_dates: event_date_list, name: `${(await users.get(req.session.userId)).firstName} ${(await users.get(req.session.userId)).lastName}`});
+    try {
+        res.render('shows/calendar', {title: 'Calendar', loggedIn: true, event_names: event_name_list, event_dates: event_date_list, name: `${(await users.get(req.session.userId)).firstName} ${(await users.get(req.session.userId)).lastName}`});
+    } catch (e) {
+        res.status(500).json({error: e});
+    }
 });
 
 module.exports = router;
