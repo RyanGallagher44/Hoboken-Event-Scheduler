@@ -17,9 +17,7 @@ router.post('/', async (req, res) => {
     let firstName = xss(req.body.signup_firstname);
     let lastName = xss(req.body.signup_lastname);
     let email = xss(req.body.signup_email);
-    let month = xss(req.body.signup_month);
-    let day = xss(req.body.signup_day);
-    let year = xss(req.body.signup_year);
+    let dob = xss(req.body.signup_dob);
     let password = xss(req.body.signup_password);
     let passwordConfirm = xss(req.body.signup_passwordconfirm);
 
@@ -27,12 +25,12 @@ router.post('/', async (req, res) => {
         firstName = validation.checkString(firstName, 'First name');
         lastName = validation.checkString(lastName, 'Last name');
         email = validation.checkEmail(email);
-        // validate month, day, and year somehow
+        dob = validation.checkDateOfBirth(dob, 'Date of birth')
         password = validation.checkPassword(password);
         passwordConfirm = validation.checkConfirmPassword(passwordConfirm);
         if (password !== passwordConfirm) throw 'Passwords do not match!';
 
-        let createUserRes = await userData.create(firstName, lastName, email, month, day, year, password, passwordConfirm);
+        let createUserRes = await userData.create(firstName, lastName, email, dob, password, passwordConfirm);
         if (createUserRes.userCreated === true) {
             res.redirect('/');
         }

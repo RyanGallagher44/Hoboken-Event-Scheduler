@@ -62,6 +62,15 @@ module.exports = {
         return date;
     },
 
+    checkDateOfBirth(date, varName) {
+      date = this.checkString(date, varName);
+      if (!moment(date).isValid()) throw `Error: Must ${varName} be a valid date string`;
+      let temp = new Date(date);
+      let current = new Date();
+      if (temp.getTime() > current.getTime()) throw `Error: ${varName} must be a time in the past`
+      return date;
+    },
+
     checkTime(time, varName) {
         time = this.checkString(time, varName);
         let timeReg = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;

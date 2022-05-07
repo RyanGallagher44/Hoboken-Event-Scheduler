@@ -5,13 +5,13 @@ const userFuncs = require('./data/users');
 const main = async () => {
   const db = await dbConnection.dbConnection();
   await db.dropDatabase();
-  let calvin = await userFuncs.create("Calvin", "Lyttle", "clyttle@stevens.edu", "1", "1", "2000", "password123", "password123");
-  let phill = await userFuncs.create("Patrick", "Hill", "phill@stevens.edu", "1", "1", "1976","debugurc0d3", "debugurc0d3");
-  let favardin = await userFuncs.create("Nariman", "Favardin", "president@stevens.edu", "1", "1", "1932", "Tuition*200", "Tuition*200");
-  let ryan = await userFuncs.create("Ryan", "Gallagher", "rgallag1@stevens.edu", "11", "27", "2000", "123", "123");
-  let aaron = await userFuncs.create("Aaron", "Alfaro", "aalfaro2@stevens.edu", "1", "1", "2001", "123", "123");
-  let eddie = await userFuncs.create("Eddie", "Ahn", "eahn@stevens.edu", "2", "29", "2000", "123", "123");
-  let ethan = await userFuncs.create("Ethan", "Che", "eche@stevens.edu", "12", "16", "1999", "123", "123");
+  let calvin = await userFuncs.create("Calvin", "Lyttle", "clyttle@stevens.edu", "2000-01-01", "password123", "password123");
+  let phill = await userFuncs.create("Patrick", "Hill", "phill@stevens.edu", "1976-01-01","debugurc0d3", "debugurc0d3");
+  let favardin = await userFuncs.create("Nariman", "Favardin", "president@stevens.edu", "1932-01-01", "Tuition*200", "Tuition*200");
+  let ryan = await userFuncs.create("Ryan", "Gallagher", "rgallag1@stevens.edu", "2000-11-27", "123", "123");
+  let aaron = await userFuncs.create("Aaron", "Alfaro", "aalfaro2@stevens.edu", "2001-01-01", "123", "123");
+  let eddie = await userFuncs.create("Eddie", "Ahn", "eahn@stevens.edu", "2000-02-29", "123", "123");
+  let ethan = await userFuncs.create("Ethan", "Che", "eche@stevens.edu", "1999-12-16", "123", "123");
 
   let hidenseek = await eventFuncs.createEvent("Hide and Seek", [calvin.id, phill.id, ryan.id], favardin.id, "2022-05-12", "12:00", "Palmer Lawn", "Hide and seek on Palmer Lawn", ["Outdoors", "Sports"]);
   let freedogs = await eventFuncs.createEvent("Free Dog Giveaway", [calvin.id], calvin.id, "2022-05-18", "03:30", "Church Square Park", "Come and get a free dog, no questions asked", ["Free Stuff", "Outdoors"]);
