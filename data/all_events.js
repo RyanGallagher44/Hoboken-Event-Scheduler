@@ -1,7 +1,3 @@
-/* All events page: Ethan
-    -Get all events
-    -Get events based on tags
-    -Search for events based on search term */
 
 const mongoCollections = require('../config/mongoCollections');
 const events = mongoCollections.events;

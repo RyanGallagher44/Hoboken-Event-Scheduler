@@ -60,7 +60,6 @@ router.get('/followers', async (req, res) => {
 router.get('/following', async (req, res) => {
     try {
         let userId = validation.checkId(xss(req.session.userId), "id");
-        console.log(await userData.getFollowing(userId));
         const user = await userData.get(userId);
         res.render('shows/following', {title: "Following", loggedIn: true, name: `${user.firstName} ${user.lastName}`, following: (await userData.getFollowing(userId))});
     } catch (e) {
