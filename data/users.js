@@ -145,7 +145,7 @@ async function removeFromFollowers(userToUnfollowId, userId) {
     let user = await userCollection.findOne({_id: ObjectId(userToUnfollowId)});
     if (!user) throw "No user with that ID";
     if (user.followers.includes(userId)) {
-        let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$pull:{followers: userId}});
+        let updated = await userCollection.updateOne({_id: ObjectId(userToUnfollowId)}, {$pull:{followers: userId}});
     }
 
     return {unfollowed: true};
