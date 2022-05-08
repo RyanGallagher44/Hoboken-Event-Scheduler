@@ -5,6 +5,13 @@ function checkPassword(pwd) {
     return pwd;
 }
 
+function checkEmail(email){     // http://zparacha.com/validate-email-address-using-javascript-regular-expression
+    email = this.checkString(email);
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailPattern.test(email)) throw 'Error: Invalid email address.'
+    return email;
+} 
+
 function checkConfirmPassword(pwd) {
     if (!pwd) throw 'You must confirm your password!';
     if (pwd.length === 0 || pwd.trim().length === 0) throw "Error: Password can not just be spaces.";
@@ -120,7 +127,7 @@ function checkDateOfBirth(date, varName) {
         try {
             firstName = checkString(firstName, "first name");
             lastName = checkString(lastName, "last name");
-            email = checkString(email, "email");
+            email = checkEmail(email);
             dob = checkDateOfBirth(dob, "date of birth");
             password = checkPassword(password);
             passwordConfirm = checkConfirmPassword(passwordConfirm);
