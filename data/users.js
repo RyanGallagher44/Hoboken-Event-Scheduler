@@ -86,6 +86,9 @@ async function get(id) { //validate
 }
 
 async function addToFollowing(userToFollowId, userId) {
+    userToFollowId = validation.checkId(userToFollowId, 'ID');
+    userId = validation.checkId(userId, 'ID');
+    
     const userCollection = await users();
 
     let user = await userCollection.findOne({_id: ObjectId(userId)});
@@ -101,6 +104,9 @@ async function addToFollowing(userToFollowId, userId) {
 }
 
 async function addToFollowers(userToFollowId, userId) {
+    userToFollowId = validation.checkId(userToFollowId, 'ID');
+    userId = validation.checkId(userId, 'ID');
+
     const userCollection = await users();
 
     let user = await userCollection.findOne({_id: ObjectId(userToFollowId)});
@@ -113,6 +119,9 @@ async function addToFollowers(userToFollowId, userId) {
 }
 
 async function removeFromFollowing(userToUnfollowId, userId) {
+    userToUnfollowId = validation.checkId(userToUnfollowId ,'ID');
+    userId = validation.checkId(userId, 'ID');
+
     const userCollection = await users();
 
     let user = await userCollection.findOne({_id: ObjectId(userId)});
@@ -128,6 +137,9 @@ async function removeFromFollowing(userToUnfollowId, userId) {
 }
 
 async function removeFromFollowers(userToUnfollowId, userId) {
+    userToUnfollowId = validation.checkId(userToUnfollowId ,'ID');
+    userId = validation.checkId(userId, 'ID');
+    
     const userCollection = await users();
 
     let user = await userCollection.findOne({_id: ObjectId(userToUnfollowId)});
@@ -140,6 +152,8 @@ async function removeFromFollowers(userToUnfollowId, userId) {
 }
 
 async function getFollowing(id) {
+    id = validation.checkId(id, 'ID');
+    
     let user = await this.get(id);
 
     let followingList = [];
@@ -151,6 +165,8 @@ async function getFollowing(id) {
 }
 
 async function getFollowers(id) {
+    id = validation.checkId(id, 'ID');
+
     let user = await this.get(id);
 
     let followersList = [];
@@ -172,7 +188,6 @@ async function joinEvent(eventId, userId) {
     if (!user) throw "No user with that ID";
     if (!(user.regEvents.includes(eventId))) { //Only register user for event if they arent already registered
         let updated = await userCollection.updateOne({_id: ObjectId(userId)}, {$push:{regEvents: eventId}});
-        //if (!updated.insertedId) throw "Could not register user to event";
     }
 
     await eventCollection.updateOne({_id: ObjectId(eventId)},{$inc:{numAttending: 1}});
