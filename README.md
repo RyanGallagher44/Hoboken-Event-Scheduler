@@ -13,3 +13,6 @@ Welcome to our final project, the Hoboken Event Scheduler!
 
 
 Note: The event recommendation feature of our app works based off of previously attended events. However, our app does not let you create an event in the past. So to see this feature in action, you can: run the seed file; register for an event; manually change the date of that event in MongoDB to have occured in the past. Doing this will also allow you to see past events attended/hosted in the user profile page.
+
+
+I pledge my honor that I have abided by the Stevens Honor System.
