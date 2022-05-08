@@ -2,11 +2,16 @@ const mongoCollections = require('../config/mongoCollections');
 const events = mongoCollections.events;
 const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
+const moment = require('moment');
 const validation = require('../validation');
 
 const createEvent = async function createEvent(name, users_registered, creator, date, time, location, description, tags){
     //check all the inputs
     name = validation.checkString(name, 'Name');
+    users_registered = validation.checkStringArray(users_registered, 'Users Registered', 0);
+    for (let x of users_registered) {
+      if (!ObjectId.isValid(x.toString())) throw "Error: Invalid User ID";
+    }
     creator = validation.checkId(creator, 'Creator');
     date = validation.checkDate(date, time, 'Date');
     time = validation.checkTime(time, 'Time');
@@ -67,7 +72,14 @@ async function get(id){
 }
 
 
-async function addComment(eventId,userId,comment,datePosted){ //check these inputs
+async function addComment(eventId,userId,comment,datePosted){
+  eventId = validation.checkId(eventId, 'Event ID');
+  userId = validation.checkId(userId, 'Event ID');
+  comment = validation.checkString(comment, 'Comment');
+  datePosted = validation.checkString(datePosted, 'Date Posted');
+
+  if (!moment(datePosted, "MM/DD/YYYY", true).isValid()) throw 'Error: Must provide a valid date string';
+  
   const newComment= {
     _id:ObjectId(),
     userId:userId,
@@ -76,7 +88,7 @@ async function addComment(eventId,userId,comment,datePosted){ //check these inpu
   }
 
   const eventCollection= await events();
-  await eventCollection.updateOne({_id:ObjectId(eventId)},{$push:{comments:newComment}}); //maybe check if this errors?
+  await eventCollection.updateOne({_id:ObjectId(eventId)},{$push:{comments:newComment}});
   newComment._id=newComment._id.toString(); //fixed typo here
   return newComment;
 }
