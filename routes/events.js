@@ -127,15 +127,12 @@ router.get('/:id', async (req, res) => {
     let id = undefined;
     try {
         id = validation.checkId(xss(req.params.id), 'Event ID'); //make sure valid ID
-        //console.log(id)
         //Next, get the event
         let event = await events.get(id);
-        //console.log(event);
-        //events.addComment('626429629c0d0ce0f61dbbcd', '6264295f9c0d0ce0f61dbbca', "this is awsome!", "today");
+
         let comments = event.comments;
         let comments_list = [];
         for (let x of comments) {
-            //console.log(x)
             let user = await userData.get(x.userId.toString()); //this should be userID, change in the database function
             let user_name = `${user.firstName} ${user.lastName}`;
             comments_list.push({name: user_name, comment: x.comment, datePosted: x.datePosted});

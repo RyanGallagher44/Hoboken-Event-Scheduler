@@ -102,7 +102,6 @@ async function addUserToEvent(eventId, userId) { //Need to update events and use
   if (!event) throw "No event with that ID";
   if (!(event.users_registered.includes(userId))) { //Only register user for event if they arent already registered
     let updated = await eventCollection.updateOne({_id: ObjectId(eventId)}, {$push:{users_registered: userId}});
-    //if (!updated.insertedId) throw "Could not register user to event";
   }
 
   return true;
