@@ -1,11 +1,13 @@
 function checkPassword(pwd) {
     if (!pwd) throw 'You must supply a password!';
+    if (pwd.length === 0 || pwd.trim().length === 0) throw "Error: Password can not just be spaces.";
 
     return pwd;
 }
 
 function checkConfirmPassword(pwd) {
     if (!pwd) throw 'You must confirm your password!';
+    if (pwd.length === 0 || pwd.trim().length === 0) throw "Error: Password can not just be spaces.";
 
     return pwd;
 }
