@@ -7,7 +7,7 @@ Welcome to our final project, the Hoboken Event Scheduler!
   
   *Run 'npm install' to install -all of the necessary packages.
   
-  *Run 'npm run seed' to seed the database with some initial data. The usernames and passwords can be read from the seed file, seed.js. Depending on when you run the seed script, it may give you an error as our code does not allow you to create events in the past. If this error occurs, you can change the dates of the events in the seed file.
+  *Run 'npm run seed' to seed the database with some initial data. The usernames and passwords can be read from the seed file, seed.js (you can use EMAIL = 'test@hbe.com' and PW = 'test'). Depending on when you run the seed script, it may give you an error as our code does not allow you to create events in the past. If this error occurs, you can change the dates of the events in the seed file.
   
   *Finally, run 'npm start'! The website is at: http://localhost:3000
 
